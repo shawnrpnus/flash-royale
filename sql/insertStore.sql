@@ -1,0 +1,13 @@
+insert into store values ('uniqlo', '9 Autumn Leaf Point');
+insert into store values ('zara', '77 Loftsgordon Lane');
+insert into store values ('forever 21' '463 Nancy Crossing');
+insert into store values ('topshop', '04 Utah Center');
+insert into store values ('topman', '135 Hoepker Street');
+insert into store values ('isetan', '4 Fairfield Terrace');
+insert into store values ('cotton on', '21996 Jackson Avenue');
+insert into store values ('takashimaya', '6 Del Mar Court');
+insert into store values ('h&m', '23 New Castle Park');
+insert into store values ('trump tower', '7736 Golf Trail');
+insert into store values ('the moon', '2613 Ryan Lane');
+insert into store values ('starbucks', '61298 Sutteridge Place');
+insert into store values ('com1 basement', '3 New Castle Plaza');
