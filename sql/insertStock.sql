@@ -1010,7 +1010,7 @@ insert into stock (quantity, location_in_store, store_name, apparel_id) values (
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (128, 'NZ22', 'h&m', 18);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (126, 'ZA76', 'uniqlo', 17);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (248, 'MF64', 'topshop', 13);
-insert into stock (quantity, location_in_store, store_name, apparel_id) values (142, 'DQ42', 'uniqlo', 14);
+insert into stock (quantity, location_in_store, store_name, apparel_id) values (142, 'DQ42', 'uniqlo', 16);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (198, 'CQ79', 'forever 21', 33);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (398, 'AE51', 'takashimaya', 10);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (338, 'WO40', 'uniqlo', 12);
@@ -1024,16 +1024,16 @@ insert into stock (quantity, location_in_store, store_name, apparel_id) values (
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (289, 'RU48', 'forever 21', 42);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (257, 'QW81', 'zara', 34);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (116, 'KO23', 'h&m', 35);
-insert into stock (quantity, location_in_store, store_name, apparel_id) values (369, 'BC63', 'takashimaya', 11);
+insert into stock (quantity, location_in_store, store_name, apparel_id) values (369, 'BC63', 'takashimaya', 12);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (213, 'LX48', 'forever 21', 50);
-insert into stock (quantity, location_in_store, store_name, apparel_id) values (200, 'GO98', 'forever 21', 42);
+insert into stock (quantity, location_in_store, store_name, apparel_id) values (200, 'GO98', 'forever 21', 43);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (172, 'GH27', 'zara', 21);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (361, 'UT41', 'isetan', 32);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (385, 'HC86', 'uniqlo', 14);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (395, 'NK06', 'forever 21', 26);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (118, 'DH73', 'forever 21', 1);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (170, 'IN58', 'forever 21', 7);
-insert into stock (quantity, location_in_store, store_name, apparel_id) values (162, 'VR72', 'zara', 11);
+insert into stock (quantity, location_in_store, store_name, apparel_id) values (162, 'VR72', 'zara', 12);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (373, 'SR31', 'cotton on', 1);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (383, 'CU79', 'takashimaya', 18);
 insert into stock (quantity, location_in_store, store_name, apparel_id) values (129, 'QD66', 'uniqlo', 36);
