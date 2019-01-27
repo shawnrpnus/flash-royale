@@ -11,11 +11,12 @@ const pool = new Pool({
   port: 5432,
 })
 
-pool.query('SELECT * FROM apparel;', (err, res) => {
-  console.log(err, res)
-  pool.end()
+app.get('/apparel/:id', (req, res) => {
+  pool.query(`SELECT * FROM apparel a WHERE a.id=${req.params.id};`, (err, resp) => {
+    console.log(err, resp)
+    res.send(resp.rows[0])
+    pool.end()
+  })
 })
-
-app.get('/', (req, res) => res.send('Hello World!'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
