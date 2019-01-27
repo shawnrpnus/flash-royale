@@ -12,7 +12,7 @@ style VARCHAR(64) NOT NULL,
 color VARCHAR(64) NOT NULL,
 size VARCHAR(8) NOT NULL CHECK (size IN ('3XS', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL')),
 price NUMERIC NOT NULL,
-image CHAR(16) UNIQUE
+image VARCHAR(16) UNIQUE
 );
 
 CREATE TABLE stock (
