@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (1, 't-shirt', 'Pepto-Bismol', 'Hersheys', 'summer', 'Black', 'L', '14.25', 'image1');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (2, 'tank top', 'FocalinXR', 'Foxconn', 'spring', 'Grey', '2XL', '56.25', 'image2');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (3, 'blouse', 'Sulindac', 'Monsanto', 'summer', 'Salmon', 'XS', '85.33', 'image3');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (4, 'champion t-shirt', 'VFEND', 'Hersheys', 'casual', 'Blue', '3XL', '23.60', 'image4');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (5, 'leather jacket', 'Meperidine Hydrochloride', 'Nestle', 'winter', 'Black', 'XL', '64.13', 'image5');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (6, 'pullover hoodie', 'Superdry', 'Hersheys', 'outdoors', 'Navy', 'L', '86.72', 'image6');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (7, 'shorts', 'Quazepam', 'Hersheys', 'indoors', 'Navy', 'XS', '85.22', 'image7');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (8, 't-shirt', 'Nicotine Polacrilex', 'Evil inc.', 'formal', 'Pink', '2XL', '18.05', 'image8');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (9, 'jeans', 'Famotidine', 'Tesla', 'fall', 'Blue', 'M', '67.62', 'image9');
-insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (10, 'dress', 'Vanilla Cupcake Antibacterial Hand Sanitizer', 'Monsanto', 'fall', 'Red', '3XL', '77.22', 'image10');
-=======
+
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (1, 'blouse', 'h&m', 'Daniel-Walker', 'casual', 'Black', '3XL', '$14.25', 'image1');
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (2, 'blouse', 'h&m', 'Thompson LLC', 'casual', 'Grey', 'XL', '$56.25', 'image2');
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (3, 'blouse', 'h&m', 'Wisoky-Upton', 'casual', 'Pink', '2XL', '$85.33', 'image3');
@@ -60,4 +49,4 @@ insert into apparel (id, name, brand, manufacturer, style, color, size, price, i
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (48, 'jacket', 'cotton on', 'Jast-Raynor', 'casual', 'Blue', '3XL', '$78.19', 'image48');
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (49, 'shorts', 'topmen', 'Kirlin-Kassulke', 'winter', 'Green', 'XS', '$70.82', 'image49');
 insert into apparel (id, name, brand, manufacturer, style, color, size, price, image) values (50, 'round neck t-shirt', 'forever 21', 'Wilkinson LLC', 'casual', 'Khaki', 'S', '$53.15', 'image50');
->>>>>>> parent of e348aa7... Fixed random errors in da statements (tested in my own db)
+
