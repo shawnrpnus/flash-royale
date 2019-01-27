@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const port = 3000
 const { Pool, Client } = require('pg')
 
@@ -11,7 +12,7 @@ const pool = new Pool({
   port: 5432,
 })
 
-app.get('/apparel/:id', (req, res) => {
+app.get('/apparel/:id', cors(), (req, res) => {
   console.log(` GET request for /apparel/${req.params.id}`)
   pool.query(`SELECT * FROM apparel a WHERE a.id=${req.params.id};`, (err, resp) => {
     if (err) {
@@ -24,7 +25,7 @@ app.get('/apparel/:id', (req, res) => {
       return
     }
     res.send(resp.rows[0])
-    pool.end()
+    //pool.end()
   })
 })
 

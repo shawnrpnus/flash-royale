@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
 import './Counter.css';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 class Counter extends Component {
   constructor(props){
@@ -10,7 +11,8 @@ class Counter extends Component {
     this.state = {
       fittingRoomNumber: '',
       showQR: false,
-      cart: []
+      cart: [],
+      scannedIds: []
     }
 
     this.showQR = this.showQR.bind(this);
@@ -39,11 +41,13 @@ class Counter extends Component {
   }
 
   appendToCart(data){
-    console.log(data);
-    if (data != null && !this.state.cart.includes(data)){
+    if (data != null && !this.state.scannedIds.includes(data)){
+      var url = 'http://localhost:3000/apparel/' + data
+      axios.get(url).then(response =>
       this.setState({
-        cart: this.state.cart.concat(data)
-     })
+        scannedIds: this.state.scannedIds.concat(data),
+        cart: this.state.cart.concat("Name: " + response.data.name + ". Colour: " + response.data.color + ". Size: " + response.data.size)
+     }))
     }
     console.log(this.state.cart);
   }
