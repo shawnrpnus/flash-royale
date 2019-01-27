@@ -65,5 +65,28 @@ app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
   })
 })
 
+app.get('/recommendations/:apparel_id', (req, res) => {
+  console.log(` GET request for /recommendations/${req.params.apparel_id}`)
+  pool.query(`SELECT * FROM apparel a, stock s 
+    WHERE a.id = s.apparel_id 
+    AND a.style = (SELECT style FROM apparel a2 WHERE a2.id = ${req.params.apparel_id})
+    AND s.quantity <> 0
+    AND a.id <> ${req.params.apparel_id}
+    ORDER BY a.price DESC
+    LIMIT 3;`,
+    (err, resp) => {
+      if (err) {
+        console.log(err, resp)
+        res.sendStatus(500)
+        return
+      }
+      if (resp.rows.length === 0) {
+        res.sendStatus(404)
+        return
+      }
+      res.send(resp.rows)
+    })
+})
+
 app.use(express.static('public'))
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
