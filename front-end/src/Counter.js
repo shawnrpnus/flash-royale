@@ -78,8 +78,10 @@ class Counter extends Component {
   }
 
   deleteItem(item) {
+    //delete scannedId that corresponds with item description, then delete item that matches description from cart
     this.setState({
-      cart: this.state.cart.filter(cartItem => cartItem !== item)
+      scannedIds: this.state.scannedIds.filter(id => this.state.scannedIds.indexOf(id) !== this.state.cart.indexOf(item)),
+      cart: this.state.cart.filter(cartItem => cartItem !== item),
     })
     console.log(this.state.cart);
   }
