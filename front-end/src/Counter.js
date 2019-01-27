@@ -13,7 +13,6 @@ class Counter extends Component {
       cart: []
     }
 
-
     this.showQR = this.showQR.bind(this);
     this.handleError = this.handleError.bind(this);
     this.offQR = this.offQR.bind(this);
@@ -59,10 +58,11 @@ class Counter extends Component {
     var fittingRoomNumber = ReactDOM.findDOMNode(this.refs.dropdown).value;
     console.log(fittingRoomNumber);
 
+    this.clearCart();
+
   }
 
   deleteItem(item){
-    var index = this.state.cart.indexOf(item);
     this.setState({
       cart: this.state.cart.filter(cartItem => cartItem !== item)
     })
@@ -84,7 +84,7 @@ class Counter extends Component {
 								<QrReader
 									delay={100}
 									onScan={this.appendToCart}
-									style={{width: '30em'}}
+									style={{width: '15em'}}
 									onError={this.handleError}
 									className="QRcam"
 								/>
