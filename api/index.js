@@ -29,7 +29,7 @@ app.get('/apparel/:id', cors(), (req, res) => {
   })
 })
 
-app.get('/stock/:apparel_id/:store_name', (req, res) => {
+app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
   console.log(` GET request for 
     /stock/${req.params.apparel_id}/'${req.params.store_name}'`)
   pool.query(`SELECT * FROM stock s WHERE s.apparel_id=${req.params.apparel_id} AND s.store_name='${req.params.store_name}';`, (err, resp) => {
@@ -43,7 +43,7 @@ app.get('/stock/:apparel_id/:store_name', (req, res) => {
   })
 })
 
-app.get('/fitting_room/:room_num/(:items)*', (req, res) => {
+app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
   const items_array = [req.params.items].concat(req.params[0].split('/').slice(1)).map(item => {
     return parseInt(item, 10)
   })
