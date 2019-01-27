@@ -90,7 +90,7 @@ class Counter extends Component {
 
     return (
       <div className="App">
-        <h1> Scan customer items, then enter fitting room </h1>
+        <h1> Scan customer's items, then select fitting room </h1>
         <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
         <button className="btn btn-primary" onClick={this.offQR}>Close Scanner</button>
         <div ref="QR">
@@ -116,7 +116,7 @@ class Counter extends Component {
           <option value="3">3</option>
           <option value="4">4</option>
         </select>
-        <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+        {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
         <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
         <h2>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h2>
       </div>
