@@ -69,7 +69,7 @@ class Counter extends Component {
     this.state.scannedIds.forEach(x => (url = url.concat(x + "/")));
     url = url.substring(0, url.length - 1);
     console.log(url);
-    axios.post(url)
+    axios.post(url);
     this.clearCart();
     this.setState({
       showConfirmation: true
@@ -111,7 +111,7 @@ class Counter extends Component {
         <ol>
           {cart}
         </ol>
-        <select className="form-control" ref="dropdown">
+        <select className="form-control" ref="dropdown" required>
           <option value="" disabled selected>Select a fitting room</option>
           <option value="1">1</option>
           <option value="2">2</option>
