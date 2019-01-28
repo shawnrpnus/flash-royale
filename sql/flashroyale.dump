@@ -205,56 +205,56 @@ SELECT pg_catalog.setval('public.apparel_id_seq', 1, false);
 --
 
 COPY public.stock (quantity, location_in_store, store_name, apparel_id) FROM stdin;
-140	JI28	isetan	22
-129	CW93	takashimaya	11
-249	ST00	topshop	2
-133	NK18	cotton on	17
-208	TN19	isetan	10
-334	KT01	zara	11
-152	XK23	forever 21	29
-257	KA85	zara	2
-375	NF66	uniqlo	9
-128	NZ22	h&m	18
-126	ZA76	uniqlo	17
-248	MF64	topshop	13
-142	DQ42	uniqlo	14
-198	CQ79	forever 21	33
-398	AE51	takashimaya	10
-338	WO40	uniqlo	12
-394	SJ28	takashimaya	29
-379	VM49	forever 21	45
-361	ER61	topshop	5
-121	NP77	uniqlo	15
-103	LC10	forever 21	11
-146	YW55	h&m	4
-206	EX26	topshop	7
-289	RU48	forever 21	42
-257	QW81	zara	34
-116	KO23	h&m	35
-369	BC63	takashimaya	12
-213	LX48	forever 21	50
-200	GO98	forever 21	43
-172	GH27	zara	21
-361	UT41	isetan	32
-385	HC86	uniqlo	16
-395	NK06	forever 21	26
-118	DH73	forever 21	1
-170	IN58	forever 21	7
-162	VR72	zara	12
-373	SR31	cotton on	1
-383	CU79	takashimaya	18
-129	QD66	uniqlo	36
-391	OS10	forever 21	32
-122	QO06	zara	6
-203	GU87	cotton on	33
-357	ON93	forever 21	40
-289	JU77	zara	23
-347	WO80	topshop	16
-275	OQ87	forever 21	38
-163	QG30	uniqlo	35
-245	SP49	h&m	42
-134	BW30	isetan	19
-192	VU69	zara	3
+146	WO36	uniqlo	1
+7	RZ54	uniqlo	2
+173	SY26	uniqlo	3
+150	ER74	uniqlo	4
+128	WG10	uniqlo	5
+100	GT06	uniqlo	6
+146	VL39	uniqlo	7
+114	UK30	uniqlo	8
+200	YL11	uniqlo	9
+23	VY41	uniqlo	10
+150	HZ89	uniqlo	11
+156	SS02	uniqlo	12
+169	PT67	uniqlo	13
+108	PZ71	uniqlo	14
+117	AR87	uniqlo	15
+156	BB27	uniqlo	16
+7	AX25	uniqlo	17
+28	MW48	uniqlo	18
+148	RY82	uniqlo	19
+134	AU09	uniqlo	20
+75	UC36	uniqlo	21
+194	VD15	uniqlo	22
+123	HI82	uniqlo	23
+73	LH66	uniqlo	24
+86	EY96	uniqlo	25
+147	ZP79	uniqlo	26
+98	JK23	uniqlo	27
+154	EZ12	uniqlo	28
+162	LO00	uniqlo	29
+13	KT69	uniqlo	30
+52	IN72	uniqlo	31
+116	GP63	uniqlo	32
+135	IY58	uniqlo	33
+153	MI39	uniqlo	34
+159	FD71	uniqlo	35
+189	HR12	uniqlo	36
+22	RJ35	uniqlo	37
+167	OY49	uniqlo	38
+195	KZ52	uniqlo	39
+173	ZL51	uniqlo	40
+33	UM31	uniqlo	41
+12	FD07	uniqlo	42
+14	OM77	uniqlo	43
+48	TK07	uniqlo	44
+73	KK81	uniqlo	45
+67	TG85	uniqlo	46
+130	PV05	uniqlo	47
+79	IU68	uniqlo	48
+61	KJ71	uniqlo	49
+114	GP40	uniqlo	50
 \.
 
 
