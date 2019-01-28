@@ -121,10 +121,22 @@ app.get('/recommendations/:apparel_id', cors(), (req, res) => {
 // POST request from fitting room to server to record recommendation fetch requests
 app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
   console.log(`POST request for /reco_request/${req.params.room_num}/${req.params.apparel_id} to be stored on server side`)
-  recommendationRequests.push({
-    fittingRoomNumber: req.params.room_num,
-    item: req.params.apparel_id
-  })
+  pool.query(`SELECT * FROM apparel a, stock s
+    WHERE a.id = s.apparel_id AND a.id = ${req.params.apparel_id};`, (err, resp) => {
+      if (err) {
+        console.log(err, resp)
+        res.sendStatus(500)
+        return
+      }
+      if (resp.rows.length === 0) {
+        res.sendStatus(404)
+        return
+      }
+      recommendationRequests.push({
+        fittingRoomNumber: req.params.room_num,
+        item: resp.rows[0]
+      })
+    })
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
 })
 
@@ -144,12 +156,15 @@ app.post('/accept_request/:room_num/:apparel_id', cors(), (req, res) => {
   let i = 0
   for (i = 0; i < recommendationRequests.length; i++) {
     if (recommendationRequests[i].fittingRoomNumber === req.params.room_num
-      && recommendationRequests[i].fittingRoomNumber === req.params.apparel_id) {
+      && recommendationRequests[i].item.id === req.params.apparel_id) {
       break
     }
   }
   const request = recommendationRequests[i]
-  recommendationRequests.splice(i, 1)
+  recommendationRequests = recommendationRequests.filter((x) => {
+    x.fittingRoomNumber !== req.params.room_num
+    x.item.id !== req.params.apparel_id
+  })
   transitRequests.push(request)
   console.log(`request for apparel id ${req.params.apparel_id} from room ${req.params.room_num} has been accepted`)
 })
