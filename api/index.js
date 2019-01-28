@@ -4,6 +4,9 @@ const cors = require('cors')
 const port = 3000
 const { Pool, Client } = require('pg')
 
+let fittingRoomItems = [];
+let recommendationRequests = [];
+
 const pool = new Pool({
   user: 'flash',
   host: 'localhost',
@@ -42,8 +45,6 @@ app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
     }
   })
 })
-
-var fittingRoomItems = [];
 
 // Store items to be sent to a (empty) fitting room
 // Called at counter step, when customer scans items he/she wants to try on
@@ -91,7 +92,8 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
     })
 })
 
-// GET recommendations for a particular apparel based on same style
+// GET request from fitting room to server for recommendations
+// Select recommendations for a particular apparel based on same style
 app.get('/recommendations/:apparel_id', (req, res) => {
   console.log(` GET request for /recommendations/${req.params.apparel_id}`)
   pool.query(`SELECT * FROM apparel a, stock s 
@@ -113,6 +115,16 @@ app.get('/recommendations/:apparel_id', (req, res) => {
       }
       res.send(resp.rows)
     })
+})
+
+// POST request from fitting room to server to record recommendation fetch requests
+app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
+  console.log(` POST request for /reco_request/${req.params.room_num}/${req.params.apparel_id} to be stored on server side`)
+  recommendationRequests.push({
+    fittingRoomNumber: req.params.room_num,
+    item: req.params.apparel_id
+  })
+  console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
 })
 
 app.use(express.static('public'))
