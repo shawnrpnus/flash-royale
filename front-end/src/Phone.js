@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Phone.css';
+import axios from 'axios';
 
 class Phone extends Component {
   constructor(props){
@@ -15,7 +16,11 @@ class Phone extends Component {
   }
 
   getPendingRequests(){
-
+    axios.get("http://localhost:3000/phone_update").then(response => 
+      this.setState({
+        pendingRequests: response.data
+      })
+    ).then(() => console.log(this.state.pendingRequests));
   }
 
   shiftFromPendingToTransit(item){
@@ -26,19 +31,22 @@ class Phone extends Component {
 
   }
 
+  componentDidMount(){
+    setTimeout(this.getPendingRequests, 1000);
+  }
   render() {
-    var listOfCurrentRequests = this.state.pendingRequests.map(x => <li key={x}>{x}</li>);
-    var listOfInTransitItems = this.state.inTransit.map(x => <li key={x}>{x}</li>);
+    var listOfCurrentRequests = this.state.pendingRequests.map(x => <li key={x.id}>{x.id}</li>);
+    var listOfInTransitItems = this.state.inTransit.map(x => <li key={x.id}>{x.id}</li>);
     return (
-      <div className='container'>
+      <div className='container row'>
         <h1>List of Current Requests:</h1>
         <div>
           <ol>
             {listOfCurrentRequests}
           </ol>
         </div>
+      <div className='container row'>
         <h1>List of Items In Transit:</h1>
-        <div>
           <ol>
             {listOfInTransitItems}
           </ol>
