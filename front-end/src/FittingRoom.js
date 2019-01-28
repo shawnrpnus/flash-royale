@@ -16,6 +16,7 @@ class FittingRoom extends Component {
     }
 
     this.getItems = this.getItems.bind(this);
+    this.getInstructions = this.getInstructions.bind(this);
     this.getRecommendations = this.getRecommendations.bind(this);
     this.requestItem = this.requestItem.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
@@ -30,6 +31,13 @@ class FittingRoom extends Component {
     });
   }
   
+  getInstructions(){
+    var url = 'http://localhost:3001/action/' + this.state.fittingRoomNumber
+    axios.get(url).then(response => {
+      console.log(response.data)
+      return;
+    });
+  }
   
   getRecommendations(apparel){
     var url = "http://localhost:3001/recommendations/" + apparel.id;
@@ -57,6 +65,7 @@ class FittingRoom extends Component {
 
   componentDidMount(){
     setInterval(this.getItems, 1000)
+    setInterval(this.getInstructions, 1000)
   }
 
   render() {
