@@ -129,7 +129,7 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
 
 // GET request from employee's phone to server to receive pending apparel fetch requests
 // Send back entire recommendationRequests array to client
-app.get('/phone_update' (req, res) => {
+app.get('/phone_update', cors(), (req, res) => {
   console.log(` GET request for /phone_update`)
   res.send(recommendationRequests)
 })
