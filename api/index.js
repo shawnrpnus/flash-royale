@@ -94,7 +94,7 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
 
 // GET request from fitting room to server for recommendations
 // Select recommendations for a particular apparel based on same style
-app.get('/recommendations/:apparel_id', (req, res) => {
+app.get('/recommendations/:apparel_id', cors(), (req, res) => {
   console.log(` GET request for /recommendations/${req.params.apparel_id}`)
   pool.query(`SELECT * FROM apparel a, stock s 
     WHERE a.id = s.apparel_id 
