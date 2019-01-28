@@ -17,7 +17,7 @@ const pool = new Pool({
 
 // GET request to fetch row from apparel table matching requested id
 app.get('/apparel/:id', cors(), (req, res) => {
-  console.log(` GET request for /apparel/${req.params.id}`)
+  console.log(`GET request for /apparel/${req.params.id}`)
   pool.query(`SELECT * FROM apparel a WHERE a.id=${req.params.id};`, (err, resp) => {
     if (err) {
       console.log(err)
@@ -34,7 +34,7 @@ app.get('/apparel/:id', cors(), (req, res) => {
 
 // GET to fetch row from stock table matching apparel_id and store_name
 app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
-  console.log(` GET request for 
+  console.log(`GET request for 
     /stock/${req.params.apparel_id}/'${req.params.store_name}'`)
   pool.query(`SELECT * FROM stock s WHERE s.apparel_id=${req.params.apparel_id} AND s.store_name='${req.params.store_name}';`, (err, resp) => {
     console.log(err, resp)
@@ -68,7 +68,7 @@ app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
 
 // Fitting room sends a request to check for items currently mapped to it
 app.get('/fitting_room/:room_num', cors(), (req, res) => {
-  console.log(` GET request for /fitting_room/${req.params.room_num}`);
+  console.log(`GET request for /fitting_room/${req.params.room_num}`);
   const fittingRoomNum = req.params.room_num;
   var itemsInRoom = [];
   fittingRoomItems.forEach(fittingRoom => {
@@ -95,7 +95,7 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
 // GET request from fitting room to server for recommendations
 // Select recommendations for a particular apparel based on same style
 app.get('/recommendations/:apparel_id', cors(), (req, res) => {
-  console.log(` GET request for /recommendations/${req.params.apparel_id}`)
+  console.log(`GET request for /recommendations/${req.params.apparel_id}`)
   pool.query(`SELECT * FROM apparel a, stock s 
     WHERE a.id = s.apparel_id 
     AND a.style = (SELECT style FROM apparel a2 WHERE a2.id = ${req.params.apparel_id})
@@ -119,7 +119,7 @@ app.get('/recommendations/:apparel_id', cors(), (req, res) => {
 
 // POST request from fitting room to server to record recommendation fetch requests
 app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
-  console.log(` POST request for /reco_request/${req.params.room_num}/${req.params.apparel_id} to be stored on server side`)
+  console.log(`POST request for /reco_request/${req.params.room_num}/${req.params.apparel_id} to be stored on server side`)
   recommendationRequests.push({
     fittingRoomNumber: req.params.room_num,
     item: req.params.apparel_id
@@ -132,6 +132,20 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
 app.get('/phone_update', cors(), (req, res) => {
   console.log(` GET request for /phone_update`)
   res.send(recommendationRequests)
+})
+
+// POST request from fitting room to server to clear items mapped to that room when customer leaves the room
+app.post('/empty_room/:room_num', cors(), (req, res) => {
+  console.log(`POST request for /empty_room/${req.params.room_num}`)
+  console.log(`Old state of fittingRoomItems: ${fittingRoomItems}`)
+  let i = 0
+  for (i = 0; i < fittingRoomItems.length; i++) {
+    if (fittingRoomItems[i].fittingRoomNumber === req.params.room_num) {
+      break
+    }
+  }
+  fittingRoomItems.splice(i, 1)
+  console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
 })
 
 app.use(express.static('public'))
