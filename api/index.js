@@ -127,5 +127,12 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
 })
 
+// GET request from employee's phone to server to receive pending apparel fetch requests
+// Send back entire recommendationRequests array to client
+app.get('/phone_update' (req, res) => {
+  console.log(` GET request for /phone_update`)
+  res.send(recommendationRequests)
+})
+
 app.use(express.static('public'))
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
