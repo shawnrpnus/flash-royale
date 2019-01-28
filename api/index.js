@@ -1,5 +1,7 @@
 const express = require('express')
+const bodyParser = require('body-parser');
 const app = express()
+app.use(bodyParser.json())
 const cors = require('cors')
 const port = 3001
 const { Pool, Client } = require('pg')
@@ -7,6 +9,8 @@ const { Pool, Client } = require('pg')
 let fittingRoomItems = []
 let recommendationRequests = []
 let transitRequests = []
+
+const instructions = {} 
 
 const pool = new Pool({
   user: 'flash',
@@ -201,6 +205,26 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
   fittingRoomItems.splice(i, 1)
   console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
   res.sendStatus(200)
+})
+
+// place instruction in instructions object, wait for the frontend to get it
+app.post('/action/:room_num', cors(), (req, res) => {
+  console.log(`POST request for /action/${req.params.room_num}`)
+  instructions[req.params.room_num] = req.body
+  res.sendStatus(200)
+})
+
+// frontend will call this endpoint every second to get its pending instructions
+app.get('/action/:room_num', cors(), (req, res) => {
+  console.log(`GET request for /action/${req.params.room_num}`)
+  const ans = instructions[req.params.room_num]
+  if (ans === null) {
+    ans = {}
+  }
+  res.send(JSON.stringify(ans))
+  // remove it after sending
+  // matthew sucks
+  delete instruction[req.params.room_num]
 })
 
 app.use(express.static('public'))
