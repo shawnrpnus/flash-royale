@@ -16,7 +16,7 @@ class Phone extends Component {
   }
 
   getPendingRequests(){
-    axios.get("http://localhost:3000/phone_update").then(response => 
+    axios.get("http://localhost:3001/phone_update").then(response => 
       this.setState({
         pendingRequests: response.data
       })
