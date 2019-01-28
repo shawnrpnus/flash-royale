@@ -64,7 +64,7 @@ app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
     items: split_items
   })
   console.log(fittingRoomItems);
-  res.end();
+  res.sendStatus(200)
 })
 
 // Fitting room sends a request to check for items currently mapped to it
@@ -194,7 +194,7 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
   console.log(`Old state of fittingRoomItems: ${fittingRoomItems}`)
   let i = 0
   for (i = 0; i < fittingRoomItems.length; i++) {
-    if (fittingRoomItems[i].fittingRoomNumber === parseInt(req.params.room_num, 10)) {
+    if (parseInt(fittingRoomItems[i].fittingRoomNumber, 10) === parseInt(req.params.room_num, 10)) {
       break
     }
   }
