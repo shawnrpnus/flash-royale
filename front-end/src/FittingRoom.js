@@ -16,9 +16,11 @@ class FittingRoom extends Component {
     }
 
     this.getItems = this.getItems.bind(this);
+    this.getInstructions = this.getInstructions.bind(this);
     this.getRecommendations = this.getRecommendations.bind(this);
     this.requestItem = this.requestItem.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
+    this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
   }
 
   getItems(){
@@ -30,6 +32,13 @@ class FittingRoom extends Component {
     });
   }
   
+  getInstructions(){
+    var url = 'http://localhost:3001/action/' + this.state.fittingRoomNumber
+    axios.get(url).then(response => {
+      console.log(response.data)
+      return;
+    });
+  }
   
   getRecommendations(apparel){
     var url = "http://localhost:3001/recommendations/" + apparel.id;
@@ -61,10 +70,19 @@ class FittingRoom extends Component {
 
   componentDidMount(){
     setInterval(this.getItems, 1000)
+    setInterval(this.getInstructions, 1000)
+  }
+
+  requestedRecommendationsContains(rec){
+    for (var i = 0; i < this.state.requestedRecommendations.length; i++){
+      if (this.state.requestedRecommendations[i].id === rec.id){
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
-
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
       return (
@@ -88,7 +106,7 @@ class FittingRoom extends Component {
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
               <h4 className="card-title">{x.color + " " + x.name + " " + x.size + " $" + x.price}</h4>
-              {this.state.requestedRecommendations.includes(x) 
+              {this.requestedRecommendationsContains(x) 
                 ? <p className="card-text">Item is on its way!</p>
                 : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
             </div>
