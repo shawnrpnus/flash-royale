@@ -8,6 +8,8 @@ let fittingRoomItems = []
 let recommendationRequests = []
 let transitRequests = []
 
+const instructions = {} 
+
 const pool = new Pool({
   user: 'flash',
   host: 'localhost',
@@ -182,6 +184,16 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
   }
   fittingRoomItems.splice(i, 1)
   console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
+})
+
+// place instruction in instructions object, wait for the frontend to get it
+app.post('/action/:room_num', cors(), (req, res) => {
+  instructions[req.params.room_num] = req.body
+})
+
+// frontend will call this endpoint every second to get its pending instructions
+app.get('/action/:room_num', cors(), (req, res) => {
+  return instructions[req.params.room_num]
 })
 
 app.use(express.static('public'))
