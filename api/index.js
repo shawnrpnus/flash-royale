@@ -223,8 +223,8 @@ app.get('/action/:room_num', cors(), (req, res) => {
   }
   res.send(JSON.stringify(ans))
   // remove it after sending
-  // matthew sucks
-  delete instruction[req.params.room_num]
+  // donald's a lil bitch
+  delete instructions[req.params.room_num]
 })
 
 app.use(express.static('public'))
