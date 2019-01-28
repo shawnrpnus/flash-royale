@@ -4,8 +4,9 @@ const cors = require('cors')
 const port = 3000
 const { Pool, Client } = require('pg')
 
-let fittingRoomItems = [];
-let recommendationRequests = [];
+let fittingRoomItems = []
+let recommendationRequests = []
+let transitRequests = []
 
 const pool = new Pool({
   user: 'flash',
@@ -127,14 +128,34 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
 })
 
-// GET request from employee's phone to server to receive pending apparel fetch requests
+// GET request from employee's phone to server to receive pending 
+// apparel fetch requests
 // Send back entire recommendationRequests array to client
 app.get('/phone_update', cors(), (req, res) => {
   console.log(` GET request for /phone_update`)
   res.send(recommendationRequests)
 })
 
-// POST request from fitting room to server to clear items mapped to that room when customer leaves the room
+// POST request from employee's phone page to server to shift apparel from 
+// pending status to in transit status
+// Called when employee accepts request to fetch the item
+app.post('/accept_request/:room_num/:apparel_id', cors(), (req, res) => {
+  console.log(`POST request for /accept_request/${req.params.room_num}/${req.params.apparel_id}`)
+  let i = 0
+  for (i = 0; i < recommendationRequests.length; i++) {
+    if (recommendationRequests[i].fittingRoomNumber === req.params.room_num
+      && recommendationRequests[i].fittingRoomNumber === req.params.apparel_id) {
+      break
+    }
+  }
+  const request = recommendationRequests[i]
+  recommendationRequests.splice(i, 1)
+  transitRequests.push(request)
+  console.log(`request for apparel id ${req.params.apparel_id} from room ${req.params.room_num} has been accepted`)
+})
+
+// POST request from fitting room to server to clear items mapped to that room 
+// when customer leaves the room
 app.post('/empty_room/:room_num', cors(), (req, res) => {
   console.log(`POST request for /empty_room/${req.params.room_num}`)
   console.log(`Old state of fittingRoomItems: ${fittingRoomItems}`)
