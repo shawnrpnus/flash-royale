@@ -64,7 +64,6 @@ class FittingRoom extends Component {
   }
 
   render() {
-
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
       return (
