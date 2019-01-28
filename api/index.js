@@ -149,4 +149,9 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
 })
 
 app.use(express.static('public'))
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
