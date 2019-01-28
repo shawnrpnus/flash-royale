@@ -43,10 +43,23 @@ app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
   })
 })
 
+var fittingRoomItems = [];
+
 app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
-  const items_array = [req.params.items].concat(req.params[0].split('/').slice(1)).map(item => {
+  var items_array = String(req.params.items) + String(req.params[0]);
+  console.log(items_array);
+  var split_items = String(items_array).split('/').map(item => {
     return parseInt(item, 10)
   })
+  const fittingRoomNum = req.params.room_num;
+  console.log(split_items);
+  fittingRoomItems.push({
+    fittingRoomNumber: fittingRoomNum,
+    items: split_items
+  })
+  console.log(fittingRoomItems);
+  res.end();
+  /*
   console.log(` GET request for /fitting_room/${req.params.room_num}/${req.params.items.concat(req.params[0])}`)
   console.log('Fetching data for apparel_id: ' + items_array)
   pool.query(`SELECT * FROM apparel a WHERE a.id = ANY($1::int[]);`,
@@ -63,6 +76,19 @@ app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
     }
     res.send(resp.rows)
   })
+  */
+})
+
+app.get('/fitting_room/:room_num', cors(), (req, res) => {
+  console.log(` GET request for /recommendations/${req.params.room_num}`);
+  const fittingRoomNum = req.params.room_num;
+  var itemsInRoom = [];
+  fittingRoomItems.forEach(fittingRoom => {
+    if (fittingRoom.fittingRoomNumber === fittingRoomNum){
+      itemsInRoom = fittingRoom.items;
+    }
+  })
+  res.send(itemsInRoom);
 })
 
 app.get('/recommendations/:apparel_id', (req, res) => {
