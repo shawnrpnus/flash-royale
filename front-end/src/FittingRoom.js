@@ -9,7 +9,7 @@ class FittingRoom extends Component {
 
     this.state = {
       customerItems: [],
-      selectedRecommendations: [],
+      requestedRecommendations: [],
       fittingRoomNumber: props.roomNumber,
       shownRecommendations: [],
       selectedItemForRecommendations: null
@@ -36,20 +36,24 @@ class FittingRoom extends Component {
     axios.get(url).then(response => {
       this.setState({
         selectedItemForRecommendations: apparel,
-        shownRecommendations: response.data
+        shownRecommendations: response.data,
       })
     })
   }
 
   requestItem(recommendation){
     var url = "http://localhost:3000/reco_request/" + this.state.fittingRoomNumber + "/" + recommendation.id;
+    this.setState({
+      requestedRecommendations: this.state.requestedRecommendations.concat(recommendation)
+    })
     axios.post(url).then(response => console.log(response));
+    console.log(this.state.requestedRecommendations);
   }
 
   leaveRoom(){
     this.setState({
       customerItems:[],
-      selectedRecommendations: [],
+      requestedRecommendations: [],
       shownRecommendations: [],
       selectedItemForRecommendations: null
     })
@@ -84,7 +88,9 @@ class FittingRoom extends Component {
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
               <h4 className="card-title">{x.color + " " + x.name + " " + x.size + " $" + x.price}</h4>
-              <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>
+              {this.state.requestedRecommendations.includes(x) 
+                ? <p className="card-text">Item is on its way!</p>
+                : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
             </div>
           </div>
         </div>

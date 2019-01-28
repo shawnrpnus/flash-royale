@@ -32,10 +32,11 @@ class Phone extends Component {
   }
 
   componentDidMount(){
-    setTimeout(this.getPendingRequests, 1000);
+    setInterval(this.getPendingRequests, 1000);
   }
+
   render() {
-    var listOfCurrentRequests = this.state.pendingRequests.map(x => <li key={x.id}>{x.id}</li>);
+    var listOfCurrentRequests = this.state.pendingRequests.map(x => <li key={x.item.id}>{x.item.id}</li>);
     var listOfInTransitItems = this.state.inTransit.map(x => <li key={x.id}>{x.id}</li>);
     return (
       <div className='container row'>
