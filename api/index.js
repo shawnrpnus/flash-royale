@@ -12,6 +12,7 @@ const pool = new Pool({
   port: 5432,
 })
 
+// GET request to fetch row from apparel table matching requested id
 app.get('/apparel/:id', cors(), (req, res) => {
   console.log(` GET request for /apparel/${req.params.id}`)
   pool.query(`SELECT * FROM apparel a WHERE a.id=${req.params.id};`, (err, resp) => {
@@ -25,10 +26,10 @@ app.get('/apparel/:id', cors(), (req, res) => {
       return
     }
     res.send(resp.rows[0])
-    //pool.end()
   })
 })
 
+// GET to fetch row from stock table matching apparel_id and store_name
 app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
   console.log(` GET request for 
     /stock/${req.params.apparel_id}/'${req.params.store_name}'`)
@@ -39,12 +40,15 @@ app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
     } else {
       res.send(resp.rows[0])
     }
-    // pool.end()
   })
 })
 
 var fittingRoomItems = [];
 
+// Store items to be sent to a (empty) fitting room
+// Called at counter step, when customer scans items he/she wants to try on
+// Items stored in fittingRoomItems in the format:
+// {fittingRoomNumber: 1, items: [2, 3, 4]}
 app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
   var items_array = String(req.params.items) + String(req.params[0]);
   console.log(items_array);
@@ -59,28 +63,11 @@ app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
   })
   console.log(fittingRoomItems);
   res.end();
-  /*
-  console.log(` GET request for /fitting_room/${req.params.room_num}/${req.params.items.concat(req.params[0])}`)
-  console.log('Fetching data for apparel_id: ' + items_array)
-  pool.query(`SELECT * FROM apparel a WHERE a.id = ANY($1::int[]);`,
-    [items_array],
-    (err, resp) => {
-    if (err) {
-      console.log(err, resp)
-      res.sendStatus(500)
-      return
-    }
-    if (resp.rows.length === 0) {
-      res.sendStatus(404)
-      return
-    }
-    res.send(resp.rows)
-  })
-  */
 })
 
+// Fitting room sends a request to check for items currently mapped to it
 app.get('/fitting_room/:room_num', cors(), (req, res) => {
-  console.log(` GET request for /recommendations/${req.params.room_num}`);
+  console.log(` GET request for /fitting_room/${req.params.room_num}`);
   const fittingRoomNum = req.params.room_num;
   var itemsInRoom = [];
   fittingRoomItems.forEach(fittingRoom => {
@@ -91,6 +78,7 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
   res.send(itemsInRoom);
 })
 
+// GET recommendations for a particular apparel based on same style
 app.get('/recommendations/:apparel_id', (req, res) => {
   console.log(` GET request for /recommendations/${req.params.apparel_id}`)
   pool.query(`SELECT * FROM apparel a, stock s 
