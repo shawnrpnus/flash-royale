@@ -133,11 +133,12 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
         return
       }
       recommendationRequests.push({
-        fittingRoomNumber: req.params.room_num,
+        fittingRoomNumber: parseInt(req.params.room_num, 10),
         item: resp.rows[0]
       })
     })
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
+  res.sendStatus(200)
 })
 
 // GET request from employee's phone to server to receive pending 
@@ -155,18 +156,17 @@ app.post('/accept_request/:room_num/:apparel_id', cors(), (req, res) => {
   console.log(`POST request for /accept_request/${req.params.room_num}/${req.params.apparel_id}`)
   let i = 0
   for (i = 0; i < recommendationRequests.length; i++) {
-    if (recommendationRequests[i].fittingRoomNumber === req.params.room_num
-      && recommendationRequests[i].item.id === req.params.apparel_id) {
+    if ((recommendationRequests[i].fittingRoomNumber === parseInt(req.params.room_num, 10))
+      && (recommendationRequests[i].item.id === parseInt(req.params.apparel_id, 10))) {
       break
     }
   }
   const request = recommendationRequests[i]
-  recommendationRequests = recommendationRequests.filter((x) => {
-    x.fittingRoomNumber !== req.params.room_num
-    x.item.id !== req.params.apparel_id
-  })
+  recommendationRequests.splice(i, 1)
   transitRequests.push(request)
   console.log(`request for apparel id ${req.params.apparel_id} from room ${req.params.room_num} has been accepted`)
+  console.log(`Updated state of transitRequests: ${transitRequests}`)
+  res.sendStatus(200)
 })
 
 // POST request from fitting room to server to clear items mapped to that room 
@@ -176,12 +176,25 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
   console.log(`Old state of fittingRoomItems: ${fittingRoomItems}`)
   let i = 0
   for (i = 0; i < fittingRoomItems.length; i++) {
-    if (fittingRoomItems[i].fittingRoomNumber === req.params.room_num) {
+    if (fittingRoomItems[i].fittingRoomNumber === parseInt(req.params.room_num, 10)) {
       break
     }
   }
   fittingRoomItems.splice(i, 1)
   console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
+  res.sendStatus(200)
+})
+
+// POST request from employee's phone to server to mark in transit items as delivered
+app.post('/delivered/:room_num/:apparel_id', cors(), (req, res) => {
+  console.log(`POST request for /delivered/${req.params.room_num}/${req.params.apparel_id}`)
+  transitRequests = transitRequests.filter((x) => {
+    x.fittingRoomNumber !== parseInt(req.params.room_num, 10)
+    x.item.id !== parseInt(req.params.apparel_id, 10)
+  })
+  console.log(`Apparel id ${req.params.apparel_id} has been delivered to room ${req.params.room_num}`)
+  console.log(`Updated state of transitRequests: ${transitRequests}`)
+  res.sendStatus(200)
 })
 
 app.use(express.static('public'))
