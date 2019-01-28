@@ -75,7 +75,20 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
       itemsInRoom = fittingRoom.items;
     }
   })
-  res.send(itemsInRoom);
+  pool.query(`SELECT * FROM apparel a WHERE a.id = ANY($1::int[]);`,
+    [itemsInRoom],
+    (err, resp) => {
+      if (err) {
+        console.log(err, resp)
+        res.sendStatus(500)
+        return
+      }
+      if (resp.rows.length === 0) {
+        res.sendStatus(404)
+        return
+      }
+      res.send(resp.rows)
+    })
 })
 
 // GET recommendations for a particular apparel based on same style
