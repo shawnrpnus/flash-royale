@@ -87,14 +87,16 @@ class FittingRoom extends Component {
   }
   
   getRecommendations(apparel){
-    var url = "http://207.46.230.56/recommendations/" + apparel.id;
-    axios.get(url).then(response => {
-      this.setState({
-        selectedItemForRecommendations: apparel,
-        shownRecommendations: response.data,
+    if (apparel.id !== null){
+      var url = "http://207.46.230.56/recommendations/" + apparel.id;
+      axios.get(url).then(response => {
+        this.setState({
+          selectedItemForRecommendations: apparel,
+          shownRecommendations: response.data,
+        })
+        console.log(response);
       })
-      console.log(response);
-    })
+    }
   }
 
   requestItem(recommendation){
