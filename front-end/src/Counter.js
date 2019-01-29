@@ -92,9 +92,14 @@ class Counter extends Component {
 
     return (
       <div className="App">
-        <h1> Scan customer's items, then select fitting room </h1>
-        <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
-        <button className="btn btn-primary" onClick={this.offQR}>Close Scanner</button>
+        <h1 className="display-4"> Changing Room Counter</h1>
+        <p className>Scan customer's items, then select fitting room</p>
+        <div className="row justify-content-center">
+          <div className="btn-group">
+            <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
+            <button className="btn btn-primary" onClick={this.offQR}>Close Scanner</button>
+          </div>
+        </div>
         <div ref="QR">
           {this.state.showQR ?
             <div>
@@ -111,16 +116,20 @@ class Counter extends Component {
         <ol>
           {cart}
         </ol>
-        <select className="form-control" ref="dropdown" required>
-          <option value="" disabled selected>Select a fitting room</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-        {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
-        <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
-        <h2>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h2>
+        <div className="container select-room">
+          <select className="form-control" ref="dropdown" required>
+            <option value="" disabled selected>Select a fitting room</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
+          <div className="btn-group">
+            <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
+        </div>
+        <h4>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
+        </div>
       </div>
     );
   }

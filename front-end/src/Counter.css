@@ -24,6 +24,7 @@
 
 .QRcam{
 	margin: 0 auto;
+  padding: 10px;
 	display: block;
 }
 
@@ -34,4 +35,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.select-room {
+  width: 50%;
+}
+
+h4 {
+  color: white;
 }
