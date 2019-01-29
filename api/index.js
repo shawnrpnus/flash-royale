@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
-const port = 3001
+const port = 80
 const { Pool, Client } = require('pg')
 
 let fittingRoomItems = []

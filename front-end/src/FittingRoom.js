@@ -93,7 +93,7 @@ class FittingRoom extends Component {
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h4 className="card-title">{x.color + " " + x.name + " " + x.size + " $" + x.price}</h4>
+              <h5 className="card-title">{x.color + " " + x.name + " \n" + x.size + "\n" + "$" + x.price}</h5>
               <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>See Recommendations</button>
             </div>
           </div>
@@ -108,7 +108,7 @@ class FittingRoom extends Component {
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h4 className="card-title">{x.color + " " + x.name + " " + x.size + " $" + x.price}</h4>
+              <h5 className="card-title">{x.color + " " + x.name + " " + "\n" + x.size + "\n" + " $" + x.price}</h5>
               {this.requestedRecommendationsContains(x) 
                 ? <p className="card-text">Item is on its way!</p>
                 : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
