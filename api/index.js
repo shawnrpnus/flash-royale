@@ -20,6 +20,14 @@ const pool = new Pool({
   port: 5432,
 })
 
+// Clears the request/item array item matching a specific roomNumber
+// Called by empty_room POST request
+function clearArrayByRoom(roomArray, roomNumber) {
+  return roomArray.filter((x) => {
+    return parseInt(x.fittingRoomNumber, 10) !== roomNumber
+  })
+}
+
 // GET request to fetch row from apparel table matching requested id
 app.get('/apparel/:id', cors(), (req, res) => {
   console.log(`GET request for /apparel/${req.params.id}`)
@@ -196,14 +204,21 @@ app.post('/delivered/:room_num/:apparel_id', cors(), (req, res) => {
 app.post('/empty_room/:room_num', cors(), (req, res) => {
   console.log(`POST request for /empty_room/${req.params.room_num}`)
   console.log(`Old state of fittingRoomItems: ${fittingRoomItems}`)
-  let i = 0
-  for (i = 0; i < fittingRoomItems.length; i++) {
-    if (parseInt(fittingRoomItems[i].fittingRoomNumber, 10) === parseInt(req.params.room_num, 10)) {
-      break
-    }
-  }
-  fittingRoomItems.splice(i, 1)
+  console.log(`Old state of fittingRoomItems: ${recommendationRequests}`)
+  console.log(`Old state of fittingRoomItems: ${transitRequests}`)
+
+  // Clear all items from corresponding index in fittingRoomItems
+  fittingRoomItems = clearArrayByRoom(fittingRoomItems, parseInt(req.params.room_num, 10))
   console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
+
+  // Clear all requests from corresponding room in recoRequests
+  recommendationRequests = clearArrayByRoom(recommendationRequests, parseInt(req.params.room_num, 10))
+  console.log(`Updated state of recommendationRequests: ${recommendationRequests}`)
+
+  // Clear all requests from corresponding room in transitRequests
+  transitRequests = clearArrayByRoom(transitRequests, parseInt(req.params.room_num, 10))
+  console.log(`Updated state of transitRequests: ${transitRequests}`)
+
   res.sendStatus(200)
 })
 
@@ -234,3 +249,4 @@ app.use(function(req, res, next) {
   next();
 });
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
