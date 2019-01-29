@@ -45,7 +45,7 @@ class Counter extends Component {
     if (data != null && !this.state.scannedIds.includes(data)) {
       var audio = new Audio('http://freesound.org/data/previews/144/144418_62484-lq.mp3');
       audio.play();
-      var url = 'http://localhost:3001/apparel/' + data
+      var url = 'http://207.46.230.56/apparel/' + data
       axios.get(url).then(response =>
         this.setState({
           scannedIds: this.state.scannedIds.concat(data),
@@ -65,7 +65,7 @@ class Counter extends Component {
 
   handleSubmit() {
     var fittingRoomNumber = ReactDOM.findDOMNode(this.refs.dropdown).value;
-    var url = "http://localhost:3001/fitting_room/" + fittingRoomNumber + "/";
+    var url = "http://207.46.230.56/fitting_room/" + fittingRoomNumber + "/";
     this.state.scannedIds.forEach(x => (url = url.concat(x + "/")));
     url = url.substring(0, url.length - 1);
     console.log(url);
