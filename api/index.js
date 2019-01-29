@@ -222,12 +222,13 @@ app.post('/action/:room_num', cors(), (req, res) => {
 
 // frontend will call this endpoint every second to get its pending instructions
 app.get('/action/:room_num', cors(), (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
   console.log(`GET request for /action/${req.params.room_num}`)
   let ans = instructions[req.params.room_num]
   if (ans === null) {
     ans = {}
   }
-  res.send(ans)
+  res.send(JSON.stringify(ans))
   // remove it after sending
   // donald's a lil bitch
   delete instructions[req.params.room_num]
