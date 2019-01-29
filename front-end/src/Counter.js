@@ -88,7 +88,7 @@ class Counter extends Component {
 
   render() {
 
-    var cart = this.state.cart.map(x => <li key={x}> {x} <button onClick={() => this.deleteItem(x)}>Delete</button></li>);
+    var cart = this.state.cart.map(x => <ol key={x}> {x} <div className="btn-group"><button className="btn btn-danger" onClick={() => this.deleteItem(x)}>Delete</button></div></ol>);
 
     return (
       <div className="App">
@@ -113,22 +113,22 @@ class Counter extends Component {
             </div> : ''
           }
         </div>
-        <ol>
+        <ol className="item-list">
           {cart}
         </ol>
         <div className="container select-room">
-          <select className="form-control" ref="dropdown" required>
+          <select className="form-control dropdown-custom" ref="dropdown" required>
             <option value="" disabled selected>Select a fitting room</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
           </select>
-          {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
           <div className="btn-group">
             <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
-        </div>
-        <h4>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
+            {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
+          </div>
+          <h4>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
         </div>
       </div>
     );
