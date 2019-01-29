@@ -13,7 +13,9 @@ class FittingRoom extends Component {
       fittingRoomNumber: props.roomNumber,
       shownRecommendations: [],
       selectedItemForRecommendations: null,
-      occupied: false
+      occupied: false,
+      before: false,
+      after: true
     }
 
     this.getItems = this.getItems.bind(this);
@@ -22,7 +24,8 @@ class FittingRoom extends Component {
     this.requestItem = this.requestItem.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
     this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
-    this.getOccupied = this.getOccupied.bind(this);
+    this.isOccupied = this.isOccupied.bind(this);
+    this.shouldEmptyRoom = this.shouldEmptyRoom.bind(this);
   }
 
   getItems(){
@@ -77,6 +80,7 @@ class FittingRoom extends Component {
   componentDidMount(){
     setInterval(this.getItems, 1000)
     setInterval(this.getInstructions, 1000)
+    setInterval(this.shouldEmptyRoom, 5000)
   }
 
   requestedRecommendationsContains(rec){
@@ -88,8 +92,7 @@ class FittingRoom extends Component {
     return false;
   }
 
-  getOccupied(){
-   
+  isOccupied(){
     var url = 'https://sense.singteliot.com/api/sensor_records/presence_count';
     var headers = new Headers();
     headers.append('X-Api-Key', '95A9DABA170B6FEFDEE15E5BD3905E19');
@@ -97,7 +100,7 @@ class FittingRoom extends Component {
     formData.append('company_id', 26);
     formData.append('device_id', 1);
   
-    fetch(url, {
+    return fetch(url, {
       method: 'POST',
       body: formData,
       headers: headers
@@ -107,10 +110,24 @@ class FittingRoom extends Component {
       console.log(jsonResponse);
       var count = response.data[0].count;
       console.log("Count: " + count);
+      return (count > 0)
     
-    })
+    }).catch(error => console.error('Error:', error));
+  }
 
-    .catch(error => console.error('Error:', error));
+  shouldEmptyRoom(){
+    
+    this.setState({
+      after: this.isOccupied()
+    }, () => {
+      if (!this.before && !this.after) {
+        return true;
+      } else {
+        this.setState({
+          before: this.isOccupied()
+        }, ()=> false)
+      }
+    })
     
   }
 
@@ -158,7 +175,7 @@ class FittingRoom extends Component {
       <div className='container'>
         <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
         <button onClick={this.leaveRoom}>Leave Room</button>
-        <button onClick={this.getOccupied}>Iot Sense</button>
+        <button onClick={this.isOccupied}>Iot Sense</button>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
