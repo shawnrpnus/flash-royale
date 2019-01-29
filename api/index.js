@@ -228,7 +228,7 @@ app.get('/action/:room_num', cors(), (req, res) => {
   if (ans === null) {
     ans = {}
   }
-  res.send(JSON.stringify(ans))
+  res.send(ans)
   // remove it after sending
   // donald's a lil bitch
   delete instructions[req.params.room_num]
