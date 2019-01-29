@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.App > ol > ol {
+  background-color: black;
+  opacity: 0.5;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
@@ -24,6 +29,7 @@
 
 .QRcam{
 	margin: 0 auto;
+  padding: 10px;
 	display: block;
 }
 
@@ -34,4 +40,20 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.select-room {
+  width: 50%;
+}
+
+.dropdown-custom {
+  margin-bottom: 1rem;
+}
+
+.item-list {
+  color: white;
+}
+
+h4 {
+  color: white;
 }

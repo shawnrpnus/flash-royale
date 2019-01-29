@@ -13,9 +13,7 @@ class FittingRoom extends Component {
       fittingRoomNumber: props.roomNumber,
       shownRecommendations: [],
       selectedItemForRecommendations: null,
-      occupied: false,
-      before: false,
-      after: true
+      isOccupied: false
     }
 
     this.getItems = this.getItems.bind(this);
@@ -24,7 +22,6 @@ class FittingRoom extends Component {
     this.requestItem = this.requestItem.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
     this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
-    this.isOccupied = this.isOccupied.bind(this);
     this.shouldEmptyRoom = this.shouldEmptyRoom.bind(this);
   }
 
@@ -34,14 +31,14 @@ class FittingRoom extends Component {
       this.setState({
         customerItems: response.data
       })
-    });
+    }).catch(error => console.error("No items in room!"));
   }
   
   getInstructions(){
     var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       if (response.data !== "") {
-        console.log(response.data)
+        console.log(response.data);
       }
       return;
     });
@@ -72,16 +69,17 @@ class FittingRoom extends Component {
       customerItems:[],
       requestedRecommendations: [],
       shownRecommendations: [],
-      selectedItemForRecommendations: null
+      selectedItemForRecommendations: null,
+      isOccupied: false, 
     })
     var url = 'http://207.46.230.56/empty_room/' + this.state.fittingRoomNumber;
     axios.post(url).then(response => console.log(response));
   }
 
   componentDidMount(){
-    setInterval(this.getItems, 1000)
-    setInterval(this.getInstructions, 1000)
-    setInterval(this.shouldEmptyRoom, 5000)
+    setInterval(this.getItems, 1000);
+    setInterval(this.getInstructions, 1000);
+    setInterval(this.shouldEmptyRoom, 1000);
   }
 
   requestedRecommendationsContains(rec){
@@ -93,7 +91,7 @@ class FittingRoom extends Component {
     return false;
   }
 
-  isOccupied(){
+  shouldEmptyRoom(){
     var url = 'https://sense.singteliot.com/api/sensor_records/presence_count';
     var headers = new Headers();
     headers.append('X-Api-Key', '95A9DABA170B6FEFDEE15E5BD3905E19');
@@ -109,6 +107,7 @@ class FittingRoom extends Component {
       
       var jsonResponse = JSON.stringify(response);
       var count = response.data[0].count;
+<<<<<<< HEAD
       return (count > 0)
     
     }).catch(error => console.error('Error:', error));
@@ -125,11 +124,21 @@ class FittingRoom extends Component {
         this.setState({
           before: this.isOccupied()
         }, ()=> false)
+=======
+      console.log("Count: " + count);
+      var isOccupiedNow = count > 0;
+      var previousOccupied = this.state.isOccupied;
+      this.setState({
+        isOccupied: isOccupiedNow
+      })
+      //console.log(this.state.isOccupied);
+      if (previousOccupied && !isOccupiedNow){
+        this.leaveRoom();
+>>>>>>> 5e92de90fa56caa2d4fc3bd352e790d3a9ce1e4f
       }
-    })
-    
+    }).catch(error => console.error('Error:', error));
   }
-
+  
   render() {
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
@@ -198,8 +207,6 @@ class FittingRoom extends Component {
     return (
       <div className='container'>
         <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
-        <button onClick={this.leaveRoom}>Leave Room</button>
-        <button onClick={this.isOccupied}>Iot Sense</button>
         <div className="container row">
           {itemsInFittingRoom}
         </div>

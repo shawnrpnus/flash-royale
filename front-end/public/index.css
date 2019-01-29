@@ -1,6 +1,9 @@
 body {
-    background-image: url('https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?cs=srgb&dl=apparel-attire-blur-994517.jpg');
-    background-size: cover;
 	overflow-y: scroll;
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+	height: 100vw;
+}
+
+#root {
+	height: 100%;
 }

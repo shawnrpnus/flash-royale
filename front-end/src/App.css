@@ -2,38 +2,63 @@
     text-align: center;
   }
   
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 40vmin;
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.QRcam{
+    margin: 0 auto;
+    display: block;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
   }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  to {
+    transform: rotate(360deg);
   }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-  .QRcam{
-      margin: 0 auto;
-      display: block;
-  }
-  
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
+}
+
+.btn-group > .btn {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.jumbotron {
+  background-image: url('https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?cs=srgb&dl=apparel-attire-blur-994517.jpg');
+  background-size: cover;
+  height: 100%;
+}
+
+h1 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+hr {
+  border-color: white;
+  height: 3px;
+  width: 75%;
+}
 
   
