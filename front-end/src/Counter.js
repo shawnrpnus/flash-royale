@@ -49,7 +49,7 @@ class Counter extends Component {
       axios.get(url).then(response =>
         this.setState({
           scannedIds: this.state.scannedIds.concat(data),
-          cart: this.state.cart.concat("Name: " + response.data.name + ". Colour: " + response.data.color + ". Size: " + response.data.size),
+          cart: this.state.cart.concat(response.data.color + " " + response.data.name + " (" + response.data.size + ") ---- "),
           showConfirmation: false
         }))
     }
@@ -93,7 +93,7 @@ class Counter extends Component {
     return (
       <div className="App">
         <h1 className="display-4"> Changing Room Counter</h1>
-        <p className>Scan customer's items, then select fitting room</p>
+        <p className="lead">Scan customer's items, then select fitting room</p>
         <div className="row justify-content-center">
           <div className="btn-group">
             <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
@@ -102,20 +102,34 @@ class Counter extends Component {
         </div>
         <div ref="QR">
           {this.state.showQR ?
-            <div>
-              <QrReader
-                delay={100}
-                onScan={this.appendToCart}
-                style={{ width: '15em' }}
-                onError={this.handleError}
-                className="QRcam"
-              />
+            <div className="jumbotron jumbotron-qr">
+              <div className="row">
+                <div className="col-sm">
+                  <QrReader
+                    delay={100}
+                    onScan={this.appendToCart}
+                    style={{ width: '15em' }}
+                    onError={this.handleError}
+                    className="QRcam"
+                  />
+                </div>
+                <div className="col-sm">
+                  <div className="item-cart text-right">
+                    <h4>Your cart</h4>
+                    <hr className="hr-black" align="right"></hr>
+                    <ol className="item-list">
+                      {cart}
+                    </ol>
+                  </div>
+                  <div className="btn-group float-right cart-btns">
+                    <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
+                    {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
+                  </div>
+                </div>
+              </div>
             </div> : ''
           }
         </div>
-        <ol className="item-list">
-          {cart}
-        </ol>
         <div className="container select-room">
           <select className="form-control dropdown-custom" ref="dropdown" required>
             <option value="" disabled selected>Select a fitting room</option>
@@ -124,11 +138,8 @@ class Counter extends Component {
             <option value="3">3</option>
             <option value="4">4</option>
           </select>
-          <div className="btn-group">
-            <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
-            {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
-          </div>
-          <h4>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
+          
+          <h4 className="submission-state">{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
         </div>
       </div>
     );
