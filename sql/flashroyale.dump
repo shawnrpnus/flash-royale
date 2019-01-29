@@ -2,12 +2,11 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 9.5.14
+-- Dumped by pg_dump version 9.5.14
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -20,11 +19,41 @@ ALTER TABLE ONLY public.stock DROP CONSTRAINT stock_apparel_id_fkey;
 ALTER TABLE ONLY public.store DROP CONSTRAINT store_pkey;
 ALTER TABLE ONLY public.stock DROP CONSTRAINT stock_pkey;
 ALTER TABLE ONLY public.apparel DROP CONSTRAINT apparel_pkey;
-ALTER TABLE public.apparel ALTER COLUMN id DROP DEFAULT;
 DROP TABLE public.store;
 DROP TABLE public.stock;
-DROP SEQUENCE public.apparel_id_seq;
 DROP TABLE public.apparel;
+DROP EXTENSION plpgsql;
+DROP SCHEMA public;
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -43,33 +72,11 @@ CREATE TABLE public.apparel (
     size character varying(8) NOT NULL,
     price numeric NOT NULL,
     image character varying(16) NOT NULL,
-    CONSTRAINT apparel_size_check CHECK (((size)::text = ANY ((ARRAY['3XS'::character varying, '2XS'::character varying, 'XS'::character varying, 'S'::character varying, 'M'::character varying, 'L'::character varying, 'XL'::character varying, '2XL'::character varying, '3XL'::character varying])::text[])))
+    CONSTRAINT apparel_size_check CHECK (((size)::text = ANY (ARRAY[('3XS'::character varying)::text, ('2XS'::character varying)::text, ('XS'::character varying)::text, ('S'::character varying)::text, ('M'::character varying)::text, ('L'::character varying)::text, ('XL'::character varying)::text, ('2XL'::character varying)::text, ('3XL'::character varying)::text])))
 );
 
 
 ALTER TABLE public.apparel OWNER TO flash;
-
---
--- Name: apparel_id_seq; Type: SEQUENCE; Schema: public; Owner: flash
---
-
-CREATE SEQUENCE public.apparel_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.apparel_id_seq OWNER TO flash;
-
---
--- Name: apparel_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: flash
---
-
-ALTER SEQUENCE public.apparel_id_seq OWNED BY public.apparel.id;
-
 
 --
 -- Name: stock; Type: TABLE; Schema: public; Owner: flash
@@ -96,13 +103,6 @@ CREATE TABLE public.store (
 
 
 ALTER TABLE public.store OWNER TO flash;
-
---
--- Name: apparel id; Type: DEFAULT; Schema: public; Owner: flash
---
-
-ALTER TABLE ONLY public.apparel ALTER COLUMN id SET DEFAULT nextval('public.apparel_id_seq'::regclass);
-
 
 --
 -- Data for Name: apparel; Type: TABLE DATA; Schema: public; Owner: flash
@@ -442,14 +442,7 @@ com1 basement	3 New Castle Plaza
 
 
 --
--- Name: apparel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: flash
---
-
-SELECT pg_catalog.setval('public.apparel_id_seq', 1, false);
-
-
---
--- Name: apparel apparel_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: apparel_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.apparel
@@ -457,7 +450,7 @@ ALTER TABLE ONLY public.apparel
 
 
 --
--- Name: stock stock_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
@@ -465,7 +458,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: store store_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: store_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.store
@@ -473,7 +466,7 @@ ALTER TABLE ONLY public.store
 
 
 --
--- Name: stock stock_apparel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock_apparel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
@@ -481,11 +474,21 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: stock stock_store_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock_store_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
     ADD CONSTRAINT stock_store_name_fkey FOREIGN KEY (store_name) REFERENCES public.store(name);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
