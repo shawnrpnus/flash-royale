@@ -38,7 +38,7 @@ class FittingRoom extends Component {
     var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       if (response.data !== "") {
-        console.log(response.data)
+        console.log(response.data);
       }
       return;
     });
@@ -79,7 +79,7 @@ class FittingRoom extends Component {
   componentDidMount(){
     setInterval(this.getItems, 1000);
     setInterval(this.getInstructions, 1000);
-    setInterval(this.shouldEmptyRoom, 5000);
+    setInterval(this.shouldEmptyRoom, 1000);
   }
 
   requestedRecommendationsContains(rec){
@@ -114,31 +114,13 @@ class FittingRoom extends Component {
       this.setState({
         isOccupied: isOccupiedNow
       })
-      console.log(this.state.isOccupied);
+      //console.log(this.state.isOccupied);
       if (previousOccupied && !isOccupiedNow){
         this.leaveRoom();
       }
     }).catch(error => console.error('Error:', error));
   }
-  /*
-  shouldEmptyRoom(){
-    this.setState({
-      after: this.isOccupied()
-    })
-
-    if (!this.before && !this.after) {
-      this.leaveRoom();
-      return true;
-    } else {
-      this.setState({
-        before: this.isOccupied()
-      })
-      return false;
-    }
-  }
-  */
   
-
   render() {
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
@@ -182,8 +164,6 @@ class FittingRoom extends Component {
     return (
       <div className='container'>
         <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
-        <button onClick={this.leaveRoom}>Leave Room</button>
-        <button onClick={this.isOccupied}>Iot Sense</button>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
