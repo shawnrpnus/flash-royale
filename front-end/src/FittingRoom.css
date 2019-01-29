@@ -48,3 +48,50 @@
   align-content: space-between;
 }
 
+.card{
+  height: 100%;
+}
+
+/* Medium screens */
+
+@media all and (max-width: 800px) {
+  .container{
+    /* When on medium sized screens, we center it by evenly distributing empty space around items */
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: space-between;
+  }
+
+  .card-image{
+    height: 250px;
+    max-width:100%;
+  }
+}
+
+/* Small screens */
+@media only screen 
+and (min-width : 768px) 
+and (max-width : 1024px) 
+and (orientation : portrait) { 
+  .container {
+    max-width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: space-between;
+    }
+
+  .card-image{
+    height: 200px;
+    max-width:100%;
+  }
+}
+
+.btn {
+  width: 110%;
+  padding-left: 3px;
+  font-size: 9px;
+  text-align: center;
+}

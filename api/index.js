@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
-const port = 3001
+const port = 3000
 const { Pool, Client } = require('pg')
 
 let fittingRoomItems = []
@@ -109,23 +109,22 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
 // Select recommendations for a particular apparel based on same style
 app.get('/recommendations/:apparel_id', cors(), (req, res) => {
   console.log(`GET request for /recommendations/${req.params.apparel_id}`)
-  pool.query(`SELECT * FROM apparel a, stock s 
-    WHERE a.id = s.apparel_id 
+  pool.query(`SELECT * FROM apparel a, stock s
+    WHERE a.id = s.apparel_id
     AND a.style = (SELECT style FROM apparel a2 WHERE a2.id = ${req.params.apparel_id})
-    AND s.quantity <> 0
     AND a.id <> ${req.params.apparel_id}
-    ORDER BY a.price DESC
-    LIMIT 3;`,
-    (err, resp) => {
-      if (err) {
-        console.log(err, resp)
-        res.sendStatus(500)
-        return
-      }
-      if (resp.rows.length === 0) {
-        res.sendStatus(404)
-        return
-      }
+    AND s.quantity <> 0
+    AND a.image IN (
+      SELECT DISTINCT a1.image
+      FROM apparel a1, stock s1                                                                                 WHERE a.id = s.apparel_id
+      AND a1.style = (SELECT style FROM apparel a2 WHERE a2.id = ${req.params.apparel_id})
+      AND a1.id <> ${req.params.apparel_id}
+      AND s1.quantity <> 0
+      AND a1.image <> (SELECT image FROM apparel a2 WHERE a2.id = ${req.params.apparel_id})
+      LIMIT 3
+    )
+    ORDER BY a.price DESC;`, (err, resp) => {
+      // Handle errors
       res.send(resp.rows)
     })
 })

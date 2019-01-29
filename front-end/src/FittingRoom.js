@@ -26,7 +26,7 @@ class FittingRoom extends Component {
   }
 
   getItems(){
-    var url = 'http://localhost:3001/fitting_room/' + this.state.fittingRoomNumber
+    var url = 'http://207.46.230.56/fitting_room/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       console.log(response);
       this.setState({
@@ -36,7 +36,7 @@ class FittingRoom extends Component {
   }
   
   getInstructions(){
-    var url = 'http://localhost:3001/action/' + this.state.fittingRoomNumber
+    var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       console.log(response.data)
       return;
@@ -44,7 +44,7 @@ class FittingRoom extends Component {
   }
   
   getRecommendations(apparel){
-    var url = "http://localhost:3001/recommendations/" + apparel.id;
+    var url = "http://207.46.230.56/recommendations/" + apparel.id;
     axios.get(url).then(response => {
       this.setState({
         selectedItemForRecommendations: apparel,
@@ -55,7 +55,7 @@ class FittingRoom extends Component {
   }
 
   requestItem(recommendation){
-    var url = "http://localhost:3001/reco_request/" + this.state.fittingRoomNumber + "/" + recommendation.id;
+    var url = "http://207.46.230.56/reco_request/" + this.state.fittingRoomNumber + "/" + recommendation.id;
     this.setState({
       requestedRecommendations: this.state.requestedRecommendations.concat(recommendation)
     })
@@ -70,7 +70,7 @@ class FittingRoom extends Component {
       shownRecommendations: [],
       selectedItemForRecommendations: null
     })
-    var url = 'http://localhost:3001/empty_room/' + this.state.fittingRoomNumber;
+    var url = 'http://207.46.230.56/empty_room/' + this.state.fittingRoomNumber;
     axios.post(url).then(response => console.log(response));
   }
 
@@ -122,7 +122,7 @@ class FittingRoom extends Component {
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h4 className="card-title">{x.color + " " + x.name + " " + x.size + " $" + x.price}</h4>
+              <h5 className="card-title">{x.color + " " + x.name + " \n" + x.size + "\n" + "$" + x.price}</h5>
               <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>See Recommendations</button>
             </div>
           </div>
@@ -140,8 +140,8 @@ class FittingRoom extends Component {
             <div className="card">
               <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
               <div className="card-body">
-                <h4 className="card-title">{x.color + " " + x.name + " $" + x.price}</h4>
-                <h4 className="card-text">Select size: </h4>
+                <h5 className="card-title">{x.color + " " + x.name + " $" + x.price}</h5>
+                <h5 className="card-text">Select size: </h5>
                 {this.requestedRecommendationsContains(x) 
                   ? <p className="card-text">Item is on its way!</p>
                   : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
