@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.14
--- Dumped by pg_dump version 9.5.14
+-- Dumped from database version 11.1
+-- Dumped by pg_dump version 11.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -19,44 +20,11 @@ ALTER TABLE ONLY public.stock DROP CONSTRAINT stock_apparel_id_fkey;
 ALTER TABLE ONLY public.store DROP CONSTRAINT store_pkey;
 ALTER TABLE ONLY public.stock DROP CONSTRAINT stock_pkey;
 ALTER TABLE ONLY public.apparel DROP CONSTRAINT apparel_pkey;
-ALTER TABLE ONLY public.apparel DROP CONSTRAINT apparel_image_key;
 ALTER TABLE public.apparel ALTER COLUMN id DROP DEFAULT;
 DROP TABLE public.store;
 DROP TABLE public.stock;
 DROP SEQUENCE public.apparel_id_seq;
 DROP TABLE public.apparel;
-DROP EXTENSION plpgsql;
-DROP SCHEMA public;
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA public;
-
-
-ALTER SCHEMA public OWNER TO postgres;
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA public IS 'standard public schema';
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -74,7 +42,7 @@ CREATE TABLE public.apparel (
     color character varying(64) NOT NULL,
     size character varying(8) NOT NULL,
     price numeric NOT NULL,
-    image character varying(16),
+    image character varying(16) NOT NULL,
     CONSTRAINT apparel_size_check CHECK (((size)::text = ANY ((ARRAY['3XS'::character varying, '2XS'::character varying, 'XS'::character varying, 'S'::character varying, 'M'::character varying, 'L'::character varying, 'XL'::character varying, '2XL'::character varying, '3XL'::character varying])::text[])))
 );
 
@@ -86,6 +54,7 @@ ALTER TABLE public.apparel OWNER TO flash;
 --
 
 CREATE SEQUENCE public.apparel_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -129,7 +98,7 @@ CREATE TABLE public.store (
 ALTER TABLE public.store OWNER TO flash;
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: flash
+-- Name: apparel id; Type: DEFAULT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.apparel ALTER COLUMN id SET DEFAULT nextval('public.apparel_id_seq'::regclass);
@@ -190,14 +159,107 @@ COPY public.apparel (id, name, brand, manufacturer, style, color, size, price, i
 48	jacket	cotton on	Jast-Raynor	casual	Blue	3XL	78.19	image48
 49	shorts	topmen	Kirlin-Kassulke	winter	Green	XS	70.82	image49
 50	round neck t-shirt	forever 21	Wilkinson LLC	casual	Khaki	S	53.15	image50
+51	blouse	h&m	Daniel-Walker	casual	Black	L	14.25	image1
+52	blouse	h&m	Thompson LLC	casual	Grey	L	56.25	image2
+53	blouse	h&m	Wisoky-Upton	casual	Pink	XL	85.33	image3
+54	blouse	h&m	Ratke, Brekke and Quitzon	casual	Blue	M	23.60	image4
+55	jacket	forever 21	Smith, Volkman and Collier	formal	Black	M	64.13	image5
+56	hoodie	topshop	Weissnat, Frami and Block	winter	White	M	86.72	image6
+57	shorts	topmen	Johns-Oberbrunner	casual	Floral	2XL	85.22	image7
+58	shirt	topmen	Frami Inc	spring	Maroon	M	18.05	image8
+59	jeans	h&m	Vandervort-Reynolds	fall	Blue	S	67.62	image9
+60	dress	topshop	Jerde, Kris and Kuvalis	casual	Red	M	77.22	image10
+61	jacket	topmen	Kuphal, Wunsch and Kautzer	spring	Black	M	17.71	image11
+62	shorts	cotton on	Osinski-Von	spring	Green	M	72.78	image12
+63	croptop	temt	Dickens Group	casual	Black	2XL	12.50	image13
+64	round neck t-shirt	topmen	Connell, Harber and Thiel	casual	Grey	M	49.50	image14
+65	shorts	forever 21	McCullough LLC	casual	Fuscia	M	90.05	image15
+66	dress	topshop	DuBuque-Lowe	casual	Multi	M	55.25	image16
+67	dress	temt	Mraz Inc	summer	Floral	2XL	15.21	image17
+68	hoodie	h&m	Schuster-Kohler	fall	Grey	L	62.09	image18
+69	dress	forever 21	Lueilwitz and Sons	winter	Navy	L	55.09	image19
+70	round neck t-shirt	topmen	Walker-McKenzie	summer	Puce	S	71.92	image20
+71	jacket	temt	Kertzmann-Bosco	formal	Indigo	XL	31.63	image21
+72	jeans	temt	Haley-Lueilwitz	summer	Orange	XL	96.72	image22
+73	round neck t-shirt	temt	Block-Mayer	summer	Navy	2XL	63.84	image23
+74	jacket	temt	Trantow Inc	spring	Black	2XL	56.07	image24
+75	jeans	h&m	Schulist Inc	winter	Blue	L	63.55	image25
+76	shorts	topshop	Reynolds, Oberbrunner and Towne	casual	Mauv	2XL	41.28	image26
+77	jacket	forever 21	Turcotte Inc	spring	Khaki	M	16.82	image27
+78	hoodie	forever 21	Schaden LLC	fall	Yellow	XL	60.45	image28
+79	jacket	cotton on	Goyette LLC	spring	Navy	L	37.06	image29
+80	jeans	topmen	Steuber-Funk	spring	Denim	S	23.03	image30
+81	skirt	topshop	Shields-Feeney	fall	White	M	61.76	image31
+82	shirt	topmen	Schaefer-Feil	formal	Maroon	XL	20.94	image32
+83	dress	temt	Weissnat LLC	winter	Floral	XL	84.32	image33
+84	jeans	forever 21	Kozey-Halvorson	summer	Denim	XL	91.92	image34
+85	round neck t-shirt	topshop	Tillman and Sons	casual	Black	XL	34.16	image35
+86	hoodie	h&m	Schultz LLC	fall	Yellow	M	85.34	image36
+87	hoodie	cotton on	Torphy Group	casual	Grey	M	17.76	image37
+88	jacket	h&m	Mayert LLC	spring	Brown	L	25.19	image38
+89	dress	forever 21	Gottlieb Inc	fall	Teal	M	52.56	image39
+90	jeans	topmen	Kling Group	spring	Grey	XL	97.32	image40
+91	blouse	cotton on	Tromp-Luettgen	fall	Pink	S	87.71	image41
+92	jeans	temt	Moen, Ruecker and Reynolds	summer	Denim	M	86.65	image42
+93	hoodie	topshop	Kuphal-Greenfelder	winter	Grey	M	46.82	image43
+94	jacket	topshop	Schumm Inc	spring	Brown	L	42.57	image44
+95	shorts	h&m	Schoen Inc	casual	Denim	2XL	53.17	image45
+96	dress	h&m	Buckridge-Wintheiser	spring	Green	XL	59.89	image46
+97	blouse	topshop	Ferry, Gleason and Hara	casual	Pink	L	83.03	image47
+98	jacket	cotton on	Jast-Raynor	casual	Blue	2XL	78.19	image48
+99	shorts	topmen	Kirlin-Kassulke	winter	Green	S	70.82	image49
+100	round neck t-shirt	forever 21	Wilkinson LLC	casual	Khaki	M	53.15	image50
+101	blouse	h&m	Daniel-Walker	casual	Black	M	14.25	image1
+102	blouse	h&m	Thompson LLC	casual	Grey	M	56.25	image2
+103	blouse	h&m	Wisoky-Upton	casual	Pink	L	85.33	image3
+104	blouse	h&m	Ratke, Brekke and Quitzon	casual	Blue	S	23.60	image4
+105	jacket	forever 21	Smith, Volkman and Collier	formal	Black	S	64.13	image5
+106	hoodie	topshop	Weissnat, Frami and Block	winter	White	S	86.72	image6
+107	shorts	topmen	Johns-Oberbrunner	casual	Floral	XL	85.22	image7
+108	shirt	topmen	Frami Inc	spring	Maroon	S	18.05	image8
+109	jeans	h&m	Vandervort-Reynolds	fall	Blue	XS	67.62	image9
+110	dress	topshop	Jerde, Kris and Kuvalis	casual	Red	S	77.22	image10
+111	jacket	topmen	Kuphal, Wunsch and Kautzer	spring	Black	S	17.71	image11
+112	shorts	cotton on	Osinski-Von	spring	Green	S	72.78	image12
+113	croptop	temt	Dickens Group	casual	Black	XL	12.50	image13
+114	round neck t-shirt	topmen	Connell, Harber and Thiel	casual	Grey	S	49.50	image14
+115	shorts	forever 21	McCullough LLC	casual	Fuscia	S	90.05	image15
+116	dress	topshop	DuBuque-Lowe	casual	Multi	S	55.25	image16
+117	dress	temt	Mraz Inc	summer	Floral	XL	15.21	image17
+118	hoodie	h&m	Schuster-Kohler	fall	Grey	M	62.09	image18
+119	dress	forever 21	Lueilwitz and Sons	winter	Navy	M	55.09	image19
+120	round neck t-shirt	topmen	Walker-McKenzie	summer	Puce	XS	71.92	image20
+121	jacket	temt	Kertzmann-Bosco	formal	Indigo	L	31.63	image21
+122	jeans	temt	Haley-Lueilwitz	summer	Orange	L	96.72	image22
+123	round neck t-shirt	temt	Block-Mayer	summer	Navy	XL	63.84	image23
+124	jacket	temt	Trantow Inc	spring	Black	XL	56.07	image24
+125	jeans	h&m	Schulist Inc	winter	Blue	M	63.55	image25
+126	shorts	topshop	Reynolds, Oberbrunner and Towne	casual	Mauv	XL	41.28	image26
+127	jacket	forever 21	Turcotte Inc	spring	Khaki	S	16.82	image27
+128	hoodie	forever 21	Schaden LLC	fall	Yellow	L	60.45	image28
+129	jacket	cotton on	Goyette LLC	spring	Navy	M	37.06	image29
+130	jeans	topmen	Steuber-Funk	spring	Denim	XS	23.03	image30
+131	skirt	topshop	Shields-Feeney	fall	White	S	61.76	image31
+132	shirt	topmen	Schaefer-Feil	formal	Maroon	L	20.94	image32
+133	dress	temt	Weissnat LLC	winter	Floral	L	84.32	image33
+134	jeans	forever 21	Kozey-Halvorson	summer	Denim	L	91.92	image34
+135	round neck t-shirt	topshop	Tillman and Sons	casual	Black	L	34.16	image35
+136	hoodie	h&m	Schultz LLC	fall	Yellow	S	85.34	image36
+137	hoodie	cotton on	Torphy Group	casual	Grey	S	17.76	image37
+138	jacket	h&m	Mayert LLC	spring	Brown	M	25.19	image38
+139	dress	forever 21	Gottlieb Inc	fall	Teal	S	52.56	image39
+140	jeans	topmen	Kling Group	spring	Grey	L	97.32	image40
+141	blouse	cotton on	Tromp-Luettgen	fall	Pink	M	87.71	image41
+142	jeans	temt	Moen, Ruecker and Reynolds	summer	Denim	S	86.65	image42
+143	hoodie	topshop	Kuphal-Greenfelder	winter	Grey	S	46.82	image43
+144	jacket	topshop	Schumm Inc	spring	Brown	M	42.57	image44
+145	shorts	h&m	Schoen Inc	casual	Denim	XL	53.17	image45
+146	dress	h&m	Buckridge-Wintheiser	spring	Green	L	59.89	image46
+147	blouse	topshop	Ferry, Gleason and Hara	casual	Pink	M	83.03	image47
+148	jacket	cotton on	Jast-Raynor	casual	Blue	XL	78.19	image48
+149	shorts	topmen	Kirlin-Kassulke	winter	Green	XS	70.82	image49
+150	round neck t-shirt	forever 21	Wilkinson LLC	casual	Khaki	S	53.15	image50
 \.
-
-
---
--- Name: apparel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: flash
---
-
-SELECT pg_catalog.setval('public.apparel_id_seq', 1, false);
 
 
 --
@@ -255,6 +317,106 @@ COPY public.stock (quantity, location_in_store, store_name, apparel_id) FROM std
 79	IU68	uniqlo	48
 61	KJ71	uniqlo	49
 114	GP40	uniqlo	50
+16	WO36	uniqlo	51
+17	RZ54	uniqlo	52
+103	SY26	uniqlo	53
+100	ER74	uniqlo	54
+108	WG10	uniqlo	55
+9	GT06	uniqlo	56
+14	VL39	uniqlo	57
+11	UK30	uniqlo	58
+20	YL11	uniqlo	59
+23	VY41	uniqlo	60
+15	HZ89	uniqlo	61
+15	SS02	uniqlo	62
+16	PT67	uniqlo	63
+10	PZ71	uniqlo	64
+11	AR87	uniqlo	65
+15	BB27	uniqlo	66
+7	AX25	uniqlo	67
+28	MW48	uniqlo	68
+48	RY82	uniqlo	69
+34	AU09	uniqlo	70
+75	UC36	uniqlo	71
+94	VD15	uniqlo	72
+23	HI82	uniqlo	73
+73	LH66	uniqlo	74
+86	EY96	uniqlo	75
+47	ZP79	uniqlo	76
+98	JK23	uniqlo	77
+54	EZ12	uniqlo	78
+62	LO00	uniqlo	79
+13	KT69	uniqlo	80
+52	IN72	uniqlo	81
+16	GP63	uniqlo	82
+35	IY58	uniqlo	83
+53	MI39	uniqlo	84
+59	FD71	uniqlo	85
+89	HR12	uniqlo	86
+22	RJ35	uniqlo	87
+67	OY49	uniqlo	88
+95	KZ52	uniqlo	89
+173	ZL51	uniqlo	90
+3	UM31	uniqlo	91
+12	FD07	uniqlo	92
+14	OM77	uniqlo	93
+48	TK07	uniqlo	94
+73	KK81	uniqlo	95
+67	TG85	uniqlo	96
+131	PV05	uniqlo	97
+79	IU68	uniqlo	98
+61	KJ71	uniqlo	99
+114	GP40	uniqlo	100
+146	WO36	uniqlo	101
+7	RZ54	uniqlo	102
+13	SY26	uniqlo	103
+10	ER74	uniqlo	104
+18	WG10	uniqlo	105
+10	GT06	uniqlo	106
+16	VL39	uniqlo	107
+14	UK30	uniqlo	108
+20	YL11	uniqlo	109
+23	VY41	uniqlo	110
+10	HZ89	uniqlo	111
+16	SS02	uniqlo	112
+19	PT67	uniqlo	113
+18	PZ71	uniqlo	114
+17	AR87	uniqlo	115
+16	BB27	uniqlo	116
+7	AX25	uniqlo	117
+28	MW48	uniqlo	118
+18	RY82	uniqlo	119
+14	AU09	uniqlo	120
+75	UC36	uniqlo	121
+194	VD15	uniqlo	122
+13	HI82	uniqlo	123
+73	LH66	uniqlo	124
+86	EY96	uniqlo	125
+17	ZP79	uniqlo	126
+8	JK23	uniqlo	127
+14	EZ12	uniqlo	128
+12	LO00	uniqlo	129
+13	KT69	uniqlo	130
+52	IN72	uniqlo	131
+16	GP63	uniqlo	132
+15	IY58	uniqlo	133
+13	MI39	uniqlo	134
+19	FD71	uniqlo	135
+19	HR12	uniqlo	136
+22	RJ35	uniqlo	137
+17	OY49	uniqlo	138
+15	KZ52	uniqlo	139
+13	ZL51	uniqlo	140
+33	UM31	uniqlo	141
+12	FD07	uniqlo	142
+14	OM77	uniqlo	143
+48	TK07	uniqlo	144
+73	KK81	uniqlo	145
+67	TG85	uniqlo	146
+10	PV05	uniqlo	147
+79	IU68	uniqlo	148
+61	KJ71	uniqlo	149
+14	GP40	uniqlo	150
 \.
 
 
@@ -280,15 +442,14 @@ com1 basement	3 New Castle Plaza
 
 
 --
--- Name: apparel_image_key; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: apparel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: flash
 --
 
-ALTER TABLE ONLY public.apparel
-    ADD CONSTRAINT apparel_image_key UNIQUE (image);
+SELECT pg_catalog.setval('public.apparel_id_seq', 1, false);
 
 
 --
--- Name: apparel_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: apparel apparel_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.apparel
@@ -296,7 +457,7 @@ ALTER TABLE ONLY public.apparel
 
 
 --
--- Name: stock_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock stock_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
@@ -304,7 +465,7 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: store_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
+-- Name: store store_pkey; Type: CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.store
@@ -312,7 +473,7 @@ ALTER TABLE ONLY public.store
 
 
 --
--- Name: stock_apparel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock stock_apparel_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
@@ -320,21 +481,11 @@ ALTER TABLE ONLY public.stock
 
 
 --
--- Name: stock_store_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
+-- Name: stock stock_store_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: flash
 --
 
 ALTER TABLE ONLY public.stock
     ADD CONSTRAINT stock_store_name_fkey FOREIGN KEY (store_name) REFERENCES public.store(name);
-
-
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
