@@ -69,18 +69,17 @@ app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
 // Items stored in fittingRoomItems in the format:
 // {fittingRoomNumber: 1, items: [2, 3, 4]}
 app.post('/fitting_room/:room_num/(:items)*', cors(), (req, res) => {
+  console.log(`POST request for /fitting_room/${req.params.room_num}/${req.params.items}/${req.params[0]}`)
   var items_array = String(req.params.items) + String(req.params[0]);
-  console.log(items_array);
   var split_items = String(items_array).split('/').map(item => {
     return parseInt(item, 10)
   })
   const fittingRoomNum = req.params.room_num;
-  console.log(split_items);
   fittingRoomItems.push({
     fittingRoomNumber: fittingRoomNum,
     items: split_items
   })
-  console.log(fittingRoomItems);
+  console.log(`Updated state of fittingRoomItems: ${JSON.stringify(fittingRoomItems)}`);
   res.sendStatus(200)
 })
 
@@ -138,8 +137,8 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
         recommendationRequests.push({
           fittingRoomNumber: parseInt(req.params.room_num, 10),
           item: resp.rows[0]
-        }
-      })
+        })
+      }
     })
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
   res.sendStatus(200)
@@ -169,7 +168,7 @@ app.post('/accept_request/:room_num/:apparel_id', cors(), (req, res) => {
   recommendationRequests.splice(i, 1)
   transitRequests.push(request)
   console.log(`request for apparel id ${req.params.apparel_id} from room ${req.params.room_num} has been accepted`)
-  console.log(`Updated state of transitRequests: ${transitRequests}`)
+  console.log(`Updated state of transitRequests: ${JSON.stringify(transitRequests)}`)
   res.sendStatus(200)
 })
 
@@ -187,7 +186,7 @@ app.post('/delivered/:room_num/:apparel_id', cors(), (req, res) => {
     x.item.id !== parseInt(req.params.apparel_id, 10)
   })
   console.log(`Apparel id ${req.params.apparel_id} has been delivered to room ${req.params.room_num}`)
-  console.log(`Updated state of transitRequests: ${transitRequests}`)
+  console.log(`Updated state of transitRequests: ${JSON.stringify(transitRequests)}`)
   res.sendStatus(200)
 })
 
@@ -201,15 +200,15 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
 
   // Clear all items from corresponding index in fittingRoomItems
   fittingRoomItems = clearArrayByRoom(fittingRoomItems, parseInt(req.params.room_num, 10))
-  console.log(`Updated state of fittingRoomItems: ${fittingRoomItems}`)
+  console.log(`Updated state of fittingRoomItems: ${JSON.stringify(fittingRoomItems)}`)
 
   // Clear all requests from corresponding room in recoRequests
   recommendationRequests = clearArrayByRoom(recommendationRequests, parseInt(req.params.room_num, 10))
-  console.log(`Updated state of recommendationRequests: ${recommendationRequests}`)
+  console.log(`Updated state of recommendationRequests: ${JSON.stringify(recommendationRequests)}`)
 
   // Clear all requests from corresponding room in transitRequests
   transitRequests = clearArrayByRoom(transitRequests, parseInt(req.params.room_num, 10))
-  console.log(`Updated state of transitRequests: ${transitRequests}`)
+  console.log(`Updated state of transitRequests: ${JSON.stringify(transitRequests)}`)
 
   res.sendStatus(200)
 })
