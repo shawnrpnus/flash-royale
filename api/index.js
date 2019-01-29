@@ -13,10 +13,10 @@ let transitRequests = []
 const instructions = {} 
 
 const pool = new Pool({
-  user: 'flash',
-  host: 'localhost',
-  database: 'flashroyale',
-  password: 'postgresisl1fe',
+  user: 'flashroyale_sa@flashroyale-postgres',
+  host: 'flashroyale-postgres.postgres.database.azure.com',
+  database: 'flashroyalepostgres',
+  password: 'zaq1@WSX',
   port: 5432,
 })
 
