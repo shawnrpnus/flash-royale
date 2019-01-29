@@ -51,15 +51,16 @@ class App extends Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container text-center'>
         {!(this.state.showCounter || this.state.showFittingRoom || this.state.showPhone || this.state.showFittingRoomSelection) ? 
             <div>
-                <h1> Hello, select screen: </h1>
-                <div className="btn-group">
-                  <button className="btn btn-primary" onClick={this.showCounter}>Counter</button>
-                  <button className="btn btn-primary" onClick={this.showFittingRoomSelection}>Fitting Room</button>
-                  <button className="btn btn-primary" onClick={this.showPhone}>Phone</button>
-                </div>
+              <h1> Hello, select screen: </h1>
+              <div className="btn-group">
+                <button className="btn btn-primary" onClick={this.showCounter}>Counter</button>
+                <button className="btn btn-primary" onClick={this.showFittingRoomSelection}>Fitting Room</button>
+                <button className="btn btn-primary" onClick={this.showPhone}>Phone</button>
+              </div>
+    
             </div> : <div></div>
         }
         {this.state.showCounter && <Counter/>}

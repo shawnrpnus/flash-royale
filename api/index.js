@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
-const port = 3000
+const port = 80
 const { Pool, Client } = require('pg')
 
 let fittingRoomItems = []
@@ -28,20 +28,28 @@ function clearArrayByRoom(roomArray, roomNumber) {
   })
 }
 
+// Handle SQL query errors
+// Return false if error occurred for query, else true
+function hasSqlQueryErrors(res, err, resp) {
+  if (err) {
+    console.log(err, resp)
+    res.sendStatus(500)
+    return true
+  }
+  if (resp.rows.length === 0) {
+    res.sendStatus(404)
+    return true
+  }
+  return false
+}
+
 // GET request to fetch row from apparel table matching requested id
 app.get('/apparel/:id', cors(), (req, res) => {
   console.log(`GET request for /apparel/${req.params.id}`)
   pool.query(`SELECT * FROM apparel a WHERE a.id=${req.params.id};`, (err, resp) => {
-    if (err) {
-      console.log(err)
-      res.sendStatus(500)
-      return
+    if (!hasSqlQueryErrors(res, err, resp)) {
+      res.send(resp.rows[0])
     }
-    if (resp.rows.length === 0) {
-      res.sendStatus(404)
-      return
-    }
-    res.send(resp.rows[0])
   })
 })
 
@@ -50,10 +58,7 @@ app.get('/stock/:apparel_id/:store_name', cors(), (req, res) => {
   console.log(`GET request for 
     /stock/${req.params.apparel_id}/'${req.params.store_name}'`)
   pool.query(`SELECT * FROM stock s WHERE s.apparel_id=${req.params.apparel_id} AND s.store_name='${req.params.store_name}';`, (err, resp) => {
-    console.log(err, resp)
-    if (resp.rows.length === 0) {
-      res.send(404)
-    } else {
+    if (!hasSqlQueryErrors(res, err, resp)) {
       res.send(resp.rows[0])
     }
   })
@@ -92,16 +97,9 @@ app.get('/fitting_room/:room_num', cors(), (req, res) => {
   pool.query(`SELECT * FROM apparel a WHERE a.id = ANY($1::int[]);`,
     [itemsInRoom],
     (err, resp) => {
-      if (err) {
-        console.log(err, resp)
-        res.sendStatus(500)
-        return
+      if (!hasSqlQueryErrors(res, err, resp)) {
+        res.send(resp.rows)
       }
-      if (resp.rows.length === 0) {
-        res.sendStatus(404)
-        return
-      }
-      res.send(resp.rows)
     })
 })
 
@@ -125,7 +123,9 @@ app.get('/recommendations/:apparel_id', cors(), (req, res) => {
     )
     ORDER BY a.price DESC;`, (err, resp) => {
       // Handle errors
-      res.send(resp.rows)
+      if (!hasSqlQueryErrors(res, err, resp)) {
+        res.send(resp.rows)
+      }
     })
 })
 
@@ -134,18 +134,11 @@ app.post('/reco_request/:room_num/:apparel_id', cors(), (req, res) => {
   console.log(`POST request for /reco_request/${req.params.room_num}/${req.params.apparel_id} to be stored on server side`)
   pool.query(`SELECT * FROM apparel a, stock s
     WHERE a.id = s.apparel_id AND a.id = ${req.params.apparel_id};`, (err, resp) => {
-      if (err) {
-        console.log(err, resp)
-        res.sendStatus(500)
-        return
-      }
-      if (resp.rows.length === 0) {
-        res.sendStatus(404)
-        return
-      }
-      recommendationRequests.push({
-        fittingRoomNumber: parseInt(req.params.room_num, 10),
-        item: resp.rows[0]
+      if (!hasSqlQueryErrors(res, err, resp)) {
+        recommendationRequests.push({
+          fittingRoomNumber: parseInt(req.params.room_num, 10),
+          item: resp.rows[0]
+        }
       })
     })
   console.log(`Storing request for apparel ${req.params.apparel_id} from room ${req.params.room_num}`)
@@ -248,4 +241,3 @@ app.use(function(req, res, next) {
   next();
 });
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
