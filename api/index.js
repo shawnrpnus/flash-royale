@@ -216,7 +216,7 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
 // place instruction in instructions object, wait for the frontend to get it
 app.post('/action/:room_num', cors(), (req, res) => {
   console.log(`POST request for /action/${req.params.room_num}`)
-  console.log('Received: ' + req.body)
+  console.log(req.body)
   instructions[req.params.room_num] = req.body
   res.sendStatus(200)
 })

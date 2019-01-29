@@ -108,9 +108,7 @@ class FittingRoom extends Component {
     }).then(response => response.json()).then(response => {
       
       var jsonResponse = JSON.stringify(response);
-      console.log(jsonResponse);
       var count = response.data[0].count;
-      console.log("Count: " + count);
       return (count > 0)
     
     }).catch(error => console.error('Error:', error));
@@ -149,27 +147,52 @@ class FittingRoom extends Component {
     });
 
     var addedRecoIds = [];
-    var currentlyShowingRecommendations = this.state.shownRecommendations.map(x => {
-      var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
-      if (!addedRecoIds.includes(x.image)){
-        addedRecoIds = addedRecoIds.concat(x.image);
-        return (
-          <div key={x.id} className="col-sm-3">
-            <div className="card">
-              <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
-              <div className="card-body">
-                <h5 className="card-title">{x.color + " " + x.name + " $" + x.price}</h5>
-                <h5 className="card-text">Select size: </h5>
-                {this.requestedRecommendationsContains(x) 
-                  ? <p className="card-text">Item is on its way!</p>
-                  : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
-              </div>
+    // map distinct recommendations to the sizes
+    const recommendations = []
+    const sizes = []
+    this.state.shownRecommendations.forEach(reco => {
+      let found = false
+      recommendations.forEach(existingReco => {
+        if (existingReco.image === reco.image) {
+          found = true
+        }
+      })
+      if (found === true) {
+        return
+      }
+      recommendations.push(reco)
+    })
+
+    recommendations.forEach(reco => {
+      const size = []
+      this.state.shownRecommendations.forEach(sreco => {
+        if (sreco.image === reco.image) {
+          size.push(sreco.size)
+        }
+      })
+      sizes.push(size + " ")
+    })
+
+    let fuck = -1
+    var currentlyShowingRecommendations = recommendations.map(reco => {
+      fuck++
+      var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + reco.image + '.jpg';
+      addedRecoIds = addedRecoIds.concat(reco.image);
+      return (
+        <div key={reco.id} className="col-sm-3">
+          <div className="card">
+            <img className="card-image-top card-image" src={imageUrl} alt="apparel" />
+            <div className="card-body">
+              <h5 className="card-title">{reco.color + " " + reco.name + " $" + reco.price}</h5>
+              <h5 className="card-text">Select size: </h5>
+              {sizes[fuck]}
+              {this.requestedRecommendationsContains(reco)
+                ? <p className="card-text">Item is on its way!</p>
+                : <button className="btn btn-primary" onClick={() => this.requestItem(reco)}>Request item</button>}
             </div>
           </div>
-        )
-      } else {
-        return null;
-      }
+        </div>
+      )
     });
 
     return (
