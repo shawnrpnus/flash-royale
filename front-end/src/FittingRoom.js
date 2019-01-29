@@ -26,6 +26,7 @@ class FittingRoom extends Component {
   getItems(){
     var url = 'http://localhost:3001/fitting_room/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
+      console.log(response);
       this.setState({
         customerItems: response.data
       })
@@ -66,6 +67,8 @@ class FittingRoom extends Component {
       shownRecommendations: [],
       selectedItemForRecommendations: null
     })
+    var url = 'http://localhost:3001/empty_room/' + this.state.fittingRoomNumber;
+    axios.post(url).then(response => console.log(response));
   }
 
   componentDidMount(){
