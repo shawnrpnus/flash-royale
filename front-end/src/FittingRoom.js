@@ -12,7 +12,8 @@ class FittingRoom extends Component {
       requestedRecommendations: [],
       fittingRoomNumber: props.roomNumber,
       shownRecommendations: [],
-      selectedItemForRecommendations: null
+      selectedItemForRecommendations: null,
+      occupied: false
     }
 
     this.getItems = this.getItems.bind(this);
@@ -21,6 +22,7 @@ class FittingRoom extends Component {
     this.requestItem = this.requestItem.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
     this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
+    this.getOccupied = this.getOccupied.bind(this);
   }
 
   getItems(){
@@ -48,6 +50,7 @@ class FittingRoom extends Component {
         selectedItemForRecommendations: apparel,
         shownRecommendations: response.data,
       })
+      console.log(response);
     })
   }
 
@@ -85,6 +88,32 @@ class FittingRoom extends Component {
     return false;
   }
 
+  getOccupied(){
+   
+    var url = 'https://sense.singteliot.com/api/sensor_records/presence_count';
+    var headers = new Headers();
+    headers.append('X-Api-Key', '95A9DABA170B6FEFDEE15E5BD3905E19');
+    var formData = new FormData();
+    formData.append('company_id', 26);
+    formData.append('device_id', 1);
+  
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    }).then(response => response.json()).then(response => {
+      
+      var jsonResponse = JSON.stringify(response);
+      console.log(jsonResponse);
+      var count = response.data[0].count;
+      console.log("Count: " + count);
+    
+    })
+
+    .catch(error => console.error('Error:', error));
+    
+  }
+
   render() {
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
@@ -101,26 +130,35 @@ class FittingRoom extends Component {
       )
     });
 
+    var addedRecoIds = [];
     var currentlyShowingRecommendations = this.state.shownRecommendations.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
-      return (
-        <div key={x.id} className="col-sm-3">
-          <div className="card">
-            <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
-            <div className="card-body">
-              <h5 className="card-title">{x.color + " " + x.name + " " + "\n" + x.size + "\n" + " $" + x.price}</h5>
-              {this.requestedRecommendationsContains(x) 
-                ? <p className="card-text">Item is on its way!</p>
-                : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
+      if (!addedRecoIds.includes(x.image)){
+        addedRecoIds = addedRecoIds.concat(x.image);
+        return (
+          <div key={x.id} className="col-sm-3">
+            <div className="card">
+              <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
+              <div className="card-body">
+                <h5 className="card-title">{x.color + " " + x.name + " $" + x.price}</h5>
+                <h5 className="card-text">Select size: </h5>
+                {this.requestedRecommendationsContains(x) 
+                  ? <p className="card-text">Item is on its way!</p>
+                  : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
+              </div>
             </div>
           </div>
-        </div>
-      )
+        )
+      } else {
+        return null;
+      }
     });
+
     return (
       <div className='container'>
         <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
         <button onClick={this.leaveRoom}>Leave Room</button>
+        <button onClick={this.getOccupied}>Iot Sense</button>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
