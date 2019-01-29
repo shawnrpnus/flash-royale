@@ -28,7 +28,6 @@ class FittingRoom extends Component {
   getItems(){
     var url = 'http://207.46.230.56/fitting_room/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
-      console.log(response);
       this.setState({
         customerItems: response.data
       })
@@ -38,6 +37,9 @@ class FittingRoom extends Component {
   getInstructions(){
     var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
+      if (response.data !== "") {
+        console.log(response.data)
+      }
       return;
     });
   }
