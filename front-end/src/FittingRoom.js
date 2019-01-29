@@ -19,7 +19,8 @@ class FittingRoom extends Component {
       highlightItem3: false,
       highlightReco1: false,
       highlightReco2: false,
-      highlightReco3: false
+      highlightReco3: false,
+      requestedSize: ''
     }
 
     this.getItems = this.getItems.bind(this);
@@ -29,6 +30,8 @@ class FittingRoom extends Component {
     this.leaveRoom = this.leaveRoom.bind(this);
     this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
     this.shouldEmptyRoom = this.shouldEmptyRoom.bind(this);
+    this.getRecoFromSizeAndItemNumber = this.getRecoFromSizeAndItemNumber.bind(this);
+    this.convertShownRecosToUniqRecos = this.convertShownRecosToUniqRecos.bind(this);
   }
 
   getItems(){
@@ -73,11 +76,36 @@ class FittingRoom extends Component {
             this.setState({
               highlightReco2: true
             })
+            console.log(this.state.highlightReco2);
             break;
           case "third item":
             this.setState({
-              highlightReco3: SVGComponentTransferFunctionElement
+              highlightReco3: true
             })
+            break;
+          case "size small":
+            this.setState({
+              requestedSize: "S"
+            })
+            break;
+          case "size medium":
+            this.setState({
+              requestedSize: "M"
+            })
+            break;
+          case "size large":
+            this.setState({
+              requestedSize: "L"
+            })
+            break;
+          case "yes confirm":
+            if (this.state.highlightReco1){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "first item"));
+            } else if (this.state.highlightReco2){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "second item"));
+            } else if (this.state.highlightReco2){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "third item"));
+            }
             break;
           default:
             console.log("Unavailable command");
@@ -97,6 +125,47 @@ class FittingRoom extends Component {
         console.log(response);
       })
     }
+  }
+
+  getRecoFromSizeAndItemNumber(size, itemNumString){
+    var index;
+    switch(itemNumString){
+      case "first item":
+        index = 0;
+        break;
+      case "second item":
+        index = 1;
+        break;
+      case "third item":
+        index = 2;
+        break;
+      default:
+    }
+    let uniqRecoArr = this.convertShownRecosToUniqRecos();
+    let uniqReco = uniqRecoArr[index];
+    let image = uniqReco.image;
+    for (var i = 0; i < this.state.shownRecommendations.length; i++){
+      if (this.state.shownRecommendations[i].image === image && this.state.shownRecommendations[i].size === size){
+        return this.state.shownRecommendations[i];
+      }
+    }
+  }
+
+  convertShownRecosToUniqRecos(){
+    const recommendations = []
+    this.state.shownRecommendations.forEach(reco => {
+      let found = false
+      recommendations.forEach(existingReco => {
+        if (existingReco.image === reco.image) {
+          found = true
+        }
+      })
+      if (found === true) {
+        return
+      }
+      recommendations.push(reco)
+    })
+    return recommendations; 
   }
 
   requestItem(recommendation){
@@ -216,15 +285,15 @@ class FittingRoom extends Component {
     var currentlyShowingRecommendations = recommendations.map(reco => {
       fuck++
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + reco.image + '.jpg';
-      var index = this.state.shownRecommendations.indexOf(reco);
+      var index = recommendations.indexOf(reco);
       if (!addedRecoIds.includes(reco.image)){
         addedRecoIds = addedRecoIds.concat(reco.image);
         return (
           <div key={reco.id} className="col-sm-3">
             <div className={"card " + 
-              ((index === 0 && this.state.highlightReco1) 
+              (((index === 0 && this.state.highlightReco1) 
               || (index === 1 && this.state.highlightReco2) 
-              || (index === 2 && this.state.highlightReco3) ? "bgyellow" : '')}>
+              || (index === 2 && this.state.highlightReco3)) ? "bgyellow" : '')}>
               <img className="card-image-top card-image" src={imageUrl} alt="apparel" />
               <div className="card-body">
                 <h5 className="card-title">{reco.color + " " + reco.name + " $" + reco.price}</h5>
