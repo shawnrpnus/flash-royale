@@ -37,6 +37,14 @@
 }
 
 .card-image{
-  height: auto;
+  height: 300px;
   max-width:100%;
 }
+
+.container{
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  align-content: space-between;
+}
+
