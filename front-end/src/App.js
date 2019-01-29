@@ -56,7 +56,7 @@ class App extends Component {
           {!(this.state.showCounter || this.state.showFittingRoom || this.state.showPhone || this.state.showFittingRoomSelection) ? 
               <div>
                 <h1 className="display-4"> Greetings, human! </h1>
-                <p className="lead">Welcome to Smart Changing Room, the retail solution that changes your life.</p>
+                <p className="lead">Welcome to <strong>FlashFit</strong>, the retail solution that changes your life.</p>
                 <hr></hr>
                 <p>Begin by selecting your screen below.</p>
                 <div className="btn-group">

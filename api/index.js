@@ -6,6 +6,8 @@ const cors = require('cors')
 const port = 80
 const { Pool, Client } = require('pg')
 
+const NUM_FITTING_ROOMS = 4
+
 let fittingRoomItems = []
 let recommendationRequests = []
 let transitRequests = []
@@ -51,6 +53,17 @@ app.get('/apparel/:id', cors(), (req, res) => {
       res.send(resp.rows[0])
     }
   })
+})
+
+// GET request to find empty fitting rooms
+app.get('/find_empty_room', cors(), (req, res) => {
+  console.log(`GET request for /find_empty_room`)
+  let temp = []
+  let result = [1, 2, 3, 4]
+  fittingRoomItems.forEach((x) => {
+    temp.push(x.fittingRoomNumber)
+  })
+  res.send(result.filter((x) => {return !temp.includes(x)}))
 })
 
 // GET to fetch row from stock table matching apparel_id and store_name
@@ -216,6 +229,7 @@ app.post('/empty_room/:room_num', cors(), (req, res) => {
 // place instruction in instructions object, wait for the frontend to get it
 app.post('/action/:room_num', cors(), (req, res) => {
   console.log(`POST request for /action/${req.params.room_num}`)
+  console.log(req.body)
   instructions[req.params.room_num] = req.body
   res.sendStatus(200)
 })

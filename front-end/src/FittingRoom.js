@@ -146,7 +146,6 @@ class FittingRoom extends Component {
       body: formData,
       headers: headers
     }).then(response => response.json()).then(response => {
-      
       //var jsonResponse = JSON.stringify(response);
       //console.log(jsonResponse);
       var count = response.data[0].count;
@@ -185,24 +184,53 @@ class FittingRoom extends Component {
     });
 
     var addedRecoIds = [];
-    var currentlyShowingRecommendations = this.state.shownRecommendations.map(x => {
-      var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
-      var index = this.state.shownRecommendations.indexOf(x);
-      if (!addedRecoIds.includes(x.image)){
-        addedRecoIds = addedRecoIds.concat(x.image);
+    // map distinct recommendations to the sizes
+    const recommendations = []
+    const sizes = []
+    this.state.shownRecommendations.forEach(reco => {
+      let found = false
+      recommendations.forEach(existingReco => {
+        if (existingReco.image === reco.image) {
+          found = true
+        }
+      })
+      if (found === true) {
+        return
+      }
+      recommendations.push(reco)
+    })
+
+    recommendations.forEach(reco => {
+      const size = []
+      this.state.shownRecommendations.forEach(sreco => {
+        if (sreco.image === reco.image) {
+          size.push(sreco.size)
+        }
+      })
+      sizes.push(size + " ")
+    })
+
+    let fuck = -1
+    var currentlyShowingRecommendations = recommendations.map(reco => {
+      fuck++
+      var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + reco.image + '.jpg';
+      var index = this.state.shownRecommendations.indexOf(reco);
+      if (!addedRecoIds.includes(reco.image)){
+        addedRecoIds = addedRecoIds.concat(reco.image);
         return (
-          <div key={x.id} className="col-sm-3">
+          <div key={reco.id} className="col-sm-3">
             <div className={"card " + 
-            ((index === 0 && this.state.highlightReco1) 
-            || (index === 1 && this.state.highlightReco2) 
-            || (index === 2 && this.state.highlightReco3) ? "bgyellow" : '')}>
-              <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
+              ((index === 0 && this.state.highlightReco1) 
+              || (index === 1 && this.state.highlightReco2) 
+              || (index === 2 && this.state.highlightReco3) ? "bgyellow" : '')}>
+              <img className="card-image-top card-image" src={imageUrl} alt="apparel" />
               <div className="card-body">
-                <h5 className="card-title">{x.color + " " + x.name + " $" + x.price}</h5>
+                <h5 className="card-title">{reco.color + " " + reco.name + " $" + reco.price}</h5>
                 <h5 className="card-text">Select size: </h5>
-                {this.requestedRecommendationsContains(x) 
+                {sizes[fuck]}
+                {this.requestedRecommendationsContains(reco)
                   ? <p className="card-text">Item is on its way!</p>
-                  : <button className="btn btn-primary" onClick={()=> this.requestItem(x)}>Request item</button>}
+                  : <button className="btn btn-primary" onClick={() => this.requestItem(reco)}>Request item</button>}
               </div>
             </div>
           </div>

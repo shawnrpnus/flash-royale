@@ -42,7 +42,8 @@
 }
 
 .jumbotron {
-  background-image: url('https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?cs=srgb&dl=apparel-attire-blur-994517.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+  url('https://images.pexels.com/photos/994517/pexels-photo-994517.jpeg?cs=srgb&dl=apparel-attire-blur-994517.jpg');
   background-size: cover;
   height: 100%;
 }
