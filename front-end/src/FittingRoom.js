@@ -24,7 +24,7 @@ class FittingRoom extends Component {
   }
 
   getItems(){
-    var url = 'http://localhost:3001/fitting_room/' + this.state.fittingRoomNumber
+    var url = 'http://207.46.230.56/fitting_room/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       console.log(response);
       this.setState({
@@ -34,7 +34,7 @@ class FittingRoom extends Component {
   }
   
   getInstructions(){
-    var url = 'http://localhost:3001/action/' + this.state.fittingRoomNumber
+    var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
       console.log(response.data)
       return;
@@ -42,7 +42,7 @@ class FittingRoom extends Component {
   }
   
   getRecommendations(apparel){
-    var url = "http://localhost:3001/recommendations/" + apparel.id;
+    var url = "http://207.46.230.56/recommendations/" + apparel.id;
     axios.get(url).then(response => {
       this.setState({
         selectedItemForRecommendations: apparel,
@@ -52,7 +52,7 @@ class FittingRoom extends Component {
   }
 
   requestItem(recommendation){
-    var url = "http://localhost:3001/reco_request/" + this.state.fittingRoomNumber + "/" + recommendation.id;
+    var url = "http://207.46.230.56/reco_request/" + this.state.fittingRoomNumber + "/" + recommendation.id;
     this.setState({
       requestedRecommendations: this.state.requestedRecommendations.concat(recommendation)
     })
@@ -67,7 +67,7 @@ class FittingRoom extends Component {
       shownRecommendations: [],
       selectedItemForRecommendations: null
     })
-    var url = 'http://localhost:3001/empty_room/' + this.state.fittingRoomNumber;
+    var url = 'http://207.46.230.56/empty_room/' + this.state.fittingRoomNumber;
     axios.post(url).then(response => console.log(response));
   }
 

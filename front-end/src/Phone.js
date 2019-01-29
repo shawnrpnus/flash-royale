@@ -18,7 +18,7 @@ class Phone extends Component {
   }
 
   getPendingRequests(){
-    axios.get("http://localhost:3001/phone_update").then(response => 
+    axios.get("http://207.46.230.56/phone_update").then(response => 
       this.setState({
         pendingRequests: response.data
       })
@@ -26,12 +26,12 @@ class Phone extends Component {
   }
 
   shiftFromPendingToTransit(request){
-    var url = 'http://localhost:3001/accept_request/' + request.fittingRoomNumber + "/" + request.item.id;
+    var url = 'http://207.46.230.56/accept_request/' + request.fittingRoomNumber + "/" + request.item.id;
     axios.post(url).then(response => console.log(response));
   }
 
   getInTransit(){
-    axios.get('http://localhost:3001/check_transit_items').then(response => {
+    axios.get('http://207.46.230.56/check_transit_items').then(response => {
       this.setState({
         inTransit: response.data
       })
@@ -39,7 +39,7 @@ class Phone extends Component {
   }
 
   markAsDelivered(inTransit){
-    var url = 'http://localhost:3001/delivered/' + inTransit.fittingRoomNumber + "/" + inTransit.item.id;
+    var url = 'http://207.46.230.56/delivered/' + inTransit.fittingRoomNumber + "/" + inTransit.item.id;
     axios.post(url).then(response => console.log(response));
   }
 
