@@ -36,7 +36,6 @@ class FittingRoom extends Component {
   getInstructions(){
     var url = 'http://207.46.230.56/action/' + this.state.fittingRoomNumber
     axios.get(url).then(response => {
-      console.log(response.data)
       return;
     });
   }
