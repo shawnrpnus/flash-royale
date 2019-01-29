@@ -95,3 +95,8 @@ and (orientation : portrait) {
   font-size: 9px;
   text-align: center;
 }
+
+.bgyellow{
+  background-color: yellow;
+  outline: 8px solid yellow; 
+}

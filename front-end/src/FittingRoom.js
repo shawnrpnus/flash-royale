@@ -13,7 +13,13 @@ class FittingRoom extends Component {
       fittingRoomNumber: props.roomNumber,
       shownRecommendations: [],
       selectedItemForRecommendations: null,
-      isOccupied: false
+      isOccupied: false,
+      highlightItem1: false,
+      highlightItem2: false,
+      highlightItem3: false,
+      highlightReco1: false,
+      highlightReco2: false,
+      highlightReco3: false
     }
 
     this.getItems = this.getItems.bind(this);
@@ -39,8 +45,44 @@ class FittingRoom extends Component {
     axios.get(url).then(response => {
       if (response.data !== "") {
         console.log(response.data);
+        switch(response.data.action){
+          case "item one":
+            this.setState({
+              highlightItem1: true
+            })
+            this.getRecommendations(this.state.customerItems[0]);
+            break;
+          case "item two":
+            this.setState({
+              highlightItem2: true
+            })
+            this.getRecommendations(this.state.customerItems[1]);
+            break;
+          case "item three":
+            this.setState({
+              highlightItem3: true
+            })
+            this.getRecommendations(this.state.customerItems[2]);
+            break;
+          case "first item":
+            this.setState({
+              highlightReco1: true
+            })
+            break;
+          case "second item":
+            this.setState({
+              highlightReco2: true
+            })
+            break;
+          case "third item":
+            this.setState({
+              highlightReco3: SVGComponentTransferFunctionElement
+            })
+            break;
+          default:
+            console.log("Unavailable command");
+        }
       }
-      return;
     });
   }
   
@@ -78,7 +120,7 @@ class FittingRoom extends Component {
 
   componentDidMount(){
     setInterval(this.getItems, 1000);
-    setInterval(this.getInstructions, 1000);
+    setInterval(this.getInstructions, 500);
     setInterval(this.shouldEmptyRoom, 1000);
   }
 
@@ -105,10 +147,10 @@ class FittingRoom extends Component {
       headers: headers
     }).then(response => response.json()).then(response => {
       
-      var jsonResponse = JSON.stringify(response);
-      console.log(jsonResponse);
+      //var jsonResponse = JSON.stringify(response);
+      //console.log(jsonResponse);
       var count = response.data[0].count;
-      console.log("Count: " + count);
+      //console.log("Count: " + count);
       var isOccupiedNow = count > 0;
       var previousOccupied = this.state.isOccupied;
       this.setState({
@@ -124,9 +166,14 @@ class FittingRoom extends Component {
   render() {
     var itemsInFittingRoom = this.state.customerItems.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
+      var index = this.state.customerItems.indexOf(x);
+      //console.log(index);
       return (
         <div key={x.id} className="col-sm-3">
-          <div className="card">
+          <div className={"card " + 
+            ((index === 0 && this.state.highlightItem1) 
+            || (index === 1 && this.state.highlightItem2) 
+            || (index === 2 && this.state.highlightItem3) ? "bgyellow" : '')}>
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
               <h5 className="card-title">{x.color + " " + x.name + " \n" + x.size + "\n" + "$" + x.price}</h5>
@@ -140,11 +187,15 @@ class FittingRoom extends Component {
     var addedRecoIds = [];
     var currentlyShowingRecommendations = this.state.shownRecommendations.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.image +  '.jpg';
+      var index = this.state.shownRecommendations.indexOf(x);
       if (!addedRecoIds.includes(x.image)){
         addedRecoIds = addedRecoIds.concat(x.image);
         return (
           <div key={x.id} className="col-sm-3">
-            <div className="card">
+            <div className={"card " + 
+            ((index === 0 && this.state.highlightReco1) 
+            || (index === 1 && this.state.highlightReco2) 
+            || (index === 2 && this.state.highlightReco3) ? "bgyellow" : '')}>
               <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
               <div className="card-body">
                 <h5 className="card-title">{x.color + " " + x.name + " $" + x.price}</h5>
