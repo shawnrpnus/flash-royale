@@ -90,10 +90,8 @@ and (orientation : portrait) {
 }
 
 .btn {
-  width: 100%;
+  width: 110%;
   padding-left: 3px;
-  font-size: 8px;
+  font-size: 9px;
+  text-align: center;
 }
-
-
-
