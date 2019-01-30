@@ -258,7 +258,7 @@ class FittingRoom extends Component {
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body" style={{textAlign: "center", alignItem: "center", justifyContent: "center"}}>
               <h5 className="card-title">{x.color + " " + x.name + " (" + x.size + ") $" + x.price}</h5>
-              <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>See Recommendations</button>
+              <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>Recommendations</button>
             </div>
           </div>
         </div>
