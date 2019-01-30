@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './FittingRoom.css';
 import axios from 'axios';
-
+import scrollToComponent from 'react-scroll-to-component';
 
 class FittingRoom extends Component {
   constructor(props){
@@ -123,6 +123,9 @@ class FittingRoom extends Component {
           shownRecommendations: response.data,
         })
         console.log(response);
+        if (this.state.shownRecommendations.length > 0){
+          scrollToComponent(this.refs.bottom,{offset:260});
+        }
       })
     }
   }
@@ -201,6 +204,7 @@ class FittingRoom extends Component {
     setInterval(this.getInstructions, 500);
     setInterval(this.shouldEmptyRoom, 1000);
   }
+
 
   requestedRecommendationsContains(rec){
     for (var i = 0; i < this.state.requestedRecommendations.length; i++){
@@ -325,7 +329,7 @@ class FittingRoom extends Component {
         <div className="container row">
           {itemsInFittingRoom}
         </div>
-        <h1 style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
+        <h1 ref={"bottom"} style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
               ? "Showing recommendations for: " + this.state.selectedItemForRecommendations.color + " " + this.state.selectedItemForRecommendations.name + " (" + this.state.selectedItemForRecommendations.size + ")"
               : "Select an item to view recommendations"}
         </h1>
