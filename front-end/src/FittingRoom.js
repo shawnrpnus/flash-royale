@@ -246,14 +246,14 @@ class FittingRoom extends Component {
       var index = this.state.customerItems.indexOf(x);
       //console.log(index);
       return (
-        <div key={x.id} className="col-sm-3">
+        <div key={x.id} className="col-sm-3" style={{marginBottom: "1rem"}}>
           <div className={"card " + 
             ((index === 0 && this.state.highlightItem1) 
             || (index === 1 && this.state.highlightItem2) 
             || (index === 2 && this.state.highlightItem3) ? "bgyellow" : '')}>
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
-            <div className="card-body">
-              <h5 className="card-title">{x.color + " " + x.name + " \n" + x.size + "\n" + "$" + x.price}</h5>
+            <div className="card-body" style={{textAlign: "center", alignItem: "center", justifyContent: "center"}}>
+              <h5 className="card-title">{x.color + " " + x.name + " (" + x.size + ") $" + x.price}</h5>
               <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>See Recommendations</button>
             </div>
           </div>
@@ -304,10 +304,10 @@ class FittingRoom extends Component {
               <img className="card-image-top card-image" src={imageUrl} alt="apparel" />
               <div className="card-body">
                 <h5 className="card-title">{reco.color + " " + reco.name + " $" + reco.price}</h5>
-                <h5 className="card-text">Select size: </h5>
-                {sizes[fuck]}
+                <h5 className="card-text">Available Sizes: </h5>
+                <p style={{color: "black", fontSize: "1.5vw"}}>{sizes[fuck]}</p>
                 {this.requestedRecommendationsContains(reco)
-                  ? <p className="card-text">Item is on its way!</p>
+                  ? <p className="card-text" style={{color: "black"}}>Item is on its way!</p>
                   : <button className="btn btn-primary" onClick={() => this.requestItem(reco)}>Request item</button>}
               </div>
             </div>
@@ -320,14 +320,16 @@ class FittingRoom extends Component {
 
     return (
       <div className='container'>
-        <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
+        <h1 style={{marginBottom: "1rem"}}>{"Fitting Room " + this.state.fittingRoomNumber}</h1>
+        <hr/>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
-        <h1>{this.state.selectedItemForRecommendations!==null
-              ? "Recommendations for: " + this.state.selectedItemForRecommendations.name
+        <h1 style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
+              ? "Showing recommendations for: " + this.state.selectedItemForRecommendations.color + " " + this.state.selectedItemForRecommendations.name + " (" + this.state.selectedItemForRecommendations.size + ")"
               : "Select an item to view recommendations"}
         </h1>
+        <hr/>
         <div className="container row">
           {currentlyShowingRecommendations}
         </div>

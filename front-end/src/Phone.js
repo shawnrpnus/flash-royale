@@ -82,11 +82,13 @@ class Phone extends Component {
     return (
       <div className='container'>
         <h1>List of Current Requests:</h1>
+        <hr/>
         <div className='container row'>
           {recommendationRequests}
         </div>
       <div className='container'>
         <h1>List of Items In Transit:</h1>
+        <hr/>
         <div className='container row'>
           {itemsInTransit}
         </div>

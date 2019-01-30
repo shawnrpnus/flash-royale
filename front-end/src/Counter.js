@@ -108,7 +108,7 @@ class Counter extends Component {
                   <QrReader
                     delay={100}
                     onScan={this.appendToCart}
-                    style={{ width: '15em' }}
+                    style={{ width: '20em' }}
                     onError={this.handleError}
                     className="QRcam"
                   />
@@ -121,8 +121,17 @@ class Counter extends Component {
                       {cart}
                     </ol>
                   </div>
-                  <div className="btn-group float-right cart-btns">
+                  <div className="float-right cart-btns">
                     <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
+                      <div className="container select-room">
+                        <select className="form-control dropdown-custom" ref="dropdown" required>
+                          <option value="" disabled selected>Select a fitting room</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                        </select>
+                      </div>
                     {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
                   </div>
                 </div>
@@ -130,17 +139,7 @@ class Counter extends Component {
             </div> : ''
           }
         </div>
-        <div className="container select-room">
-          <select className="form-control dropdown-custom" ref="dropdown" required>
-            <option value="" disabled selected>Select a fitting room</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-          
-          <h4 className="submission-state">{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
-        </div>
+        <h4 className="submission-state">{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
       </div>
     );
   }
