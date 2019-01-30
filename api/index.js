@@ -6,7 +6,6 @@ const fs = require('fs')
 const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
-const port = 80
 const { Pool, Client } = require('pg')
 
 const NUM_FITTING_ROOMS = 4
@@ -269,6 +268,9 @@ const options = {
 }
 
 // Create an HTTP service.
-http.createServer(app).listen(80);
+httpserver = http.createServer(app).listen(80);
 // Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(443);
+httpsserver = https.createServer(options, app).listen(443);
+
+httpserver.listen(80, () => console.log('HTTP listening on port 80'))
+httpsserver.listen(443, () => console.log('HTTP listening on port 443'))
