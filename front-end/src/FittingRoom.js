@@ -115,7 +115,7 @@ class FittingRoom extends Component {
   }
   
   getRecommendations(apparel){
-    if (apparel.id !== null){
+    if (apparel !== null){
       var url = "http://207.46.230.56/recommendations/" + apparel.id;
       axios.get(url).then(response => {
         this.setState({
@@ -184,6 +184,13 @@ class FittingRoom extends Component {
       shownRecommendations: [],
       selectedItemForRecommendations: null,
       isOccupied: false, 
+      highlightItem1: false,
+      highlightItem2: false,
+      highlightItem3: false,
+      highlightReco1: false,
+      highlightReco2: false,
+      highlightReco3: false,
+      requestedSize: ''
     })
     var url = 'http://207.46.230.56/empty_room/' + this.state.fittingRoomNumber;
     axios.post(url).then(response => console.log(response));
@@ -220,7 +227,7 @@ class FittingRoom extends Component {
       //var jsonResponse = JSON.stringify(response);
       //console.log(jsonResponse);
       var count = response.data[0].count;
-      //console.log("Count: " + count);
+      console.log("Count: " + count);
       var isOccupiedNow = count > 0;
       var previousOccupied = this.state.isOccupied;
       this.setState({
