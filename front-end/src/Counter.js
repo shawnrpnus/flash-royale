@@ -13,7 +13,8 @@ class Counter extends Component {
       showQR: false,
       cart: [],
       scannedIds: [],
-      showConfirmation: false
+      showConfirmation: false,
+      emptyRooms: []
     }
 
     this.showQR = this.showQR.bind(this);
@@ -23,6 +24,7 @@ class Counter extends Component {
     this.clearCart = this.clearCart.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.getEmptyRooms = this.getEmptyRooms.bind(this);
   }
 
   offQR() {
@@ -86,6 +88,15 @@ class Counter extends Component {
     console.log(this.state.cart);
   }
 
+  getEmptyRooms(){
+    axios.get("http://207.46.230.56/find_empty_room").then(response => {
+      this.setState({
+        emptyRooms: response.data
+      })
+      console.log(this.state.emptyRooms);
+    });
+  }
+
   render() {
 
     var cart = this.state.cart.map(x => <ol key={x}> {x} <div className="btn-group"><button className="btn btn-danger" onClick={() => this.deleteItem(x)}>Delete</button></div></ol>);
@@ -98,6 +109,7 @@ class Counter extends Component {
           <div className="btn-group">
             <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
             <button className="btn btn-primary" onClick={this.offQR}>Close Scanner</button>
+            <button onClick={this.getEmptyRooms}>Get empty rooms</button>
           </div>
         </div>
         <div ref="QR">
@@ -106,7 +118,7 @@ class Counter extends Component {
               <div className="row">
                 <div className="col-sm">
                   <QrReader
-                    delay={100}
+                    delay={200}
                     onScan={this.appendToCart}
                     style={{ width: '20em' }}
                     onError={this.handleError}
@@ -139,7 +151,7 @@ class Counter extends Component {
             </div> : ''
           }
         </div>
-        <h4 className="submission-state">{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
+        <h4 className="submission-state" style={{marginTop: "1rem"}}>{this.state.showConfirmation ? "Items successfully submitted!" : "Pending new submission..."}</h4>
       </div>
     );
   }
