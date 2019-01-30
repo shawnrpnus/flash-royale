@@ -52,12 +52,15 @@ class Phone extends Component {
     var recommendationRequests = this.state.pendingRequests.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.item.image +  '.jpg';
       return (
-        <div key={uniqid()} className="col-sm-3">
+        <div key={uniqid()} className="row current-req-row">
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h4 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h4>
-              <button className="btn btn-primary" onClick={() => this.shiftFromPendingToTransit(x)}>Fetch for customer</button>
+              <h5 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h5>
+              <div className="row text-center">
+                <button className="btn btn-primary" onClick={() => this.
+                  shiftFromPendingToTransit(x)}>Fetch for customer</button>
+              </div>
             </div>
           </div>
         </div>
@@ -67,12 +70,14 @@ class Phone extends Component {
     var itemsInTransit = this.state.inTransit.map(x => {
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + x.item.image +  '.jpg';
       return (
-        <div key={uniqid()} className="col-sm-3">
+        <div key={uniqid()} className="row current-req-row">
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h4 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h4>
-              <button className="btn btn-primary" onClick={() => this.markAsDelivered(x)}>Delivered</button>
+              <h5 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h5>
+              <div className="row text-center">
+                <button className="btn btn-primary" onClick={() => this.markAsDelivered(x)}>Delivered</button>
+              </div>
             </div>
           </div>
         </div>
@@ -81,17 +86,19 @@ class Phone extends Component {
 
     return (
       <div className='container'>
-        <h1>List of Current Requests:</h1>
-        <hr/>
-        <div className='container row'>
-          {recommendationRequests}
+        <h3 className="phone-text">Current Requests:</h3>
+        <hr className='hr-black'></hr>
+        <div className='container'>
+          <div className='col-sm'>
+            {recommendationRequests}
+          </div>
         </div>
-      <div className='container'>
-        <h1>List of Items In Transit:</h1>
-        <hr/>
-        <div className='container row'>
-          {itemsInTransit}
-        </div>
+        <h3 className="phone-text">Items In Transit:</h3>
+        <hr className='hr-black'></hr>
+        <div className='container'>
+          <div className='col-sm'>
+            {itemsInTransit}
+          </div>
         </div>
       </div>
     );
