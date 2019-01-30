@@ -121,7 +121,7 @@ class Counter extends Component {
               <div className="row">
                 <div className="col-sm">
                   <QrReader
-                    delay={300}
+                    delay={500}
                     onScan={this.appendToCart}
                     style={{ width: '20em' }}
                     onError={this.handleError}
