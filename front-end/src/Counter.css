@@ -59,6 +59,10 @@
   padding-bottom: 0;
 }
 
+.jumbotron {
+  height: 1024px;
+}
+
 .jumbotron-qr {
   width: 100%;
   height: auto;

@@ -113,7 +113,6 @@ class Counter extends Component {
           <div className="btn-group">
             <button className="btn btn-primary" onClick={this.showQR}>Scan QR Code of Item</button>
             <button className="btn btn-primary" onClick={this.offQR}>Close Scanner</button>
-            <button onClick={this.getEmptyRooms}>Get empty rooms</button>
           </div>
         </div>
         <div ref="QR">
@@ -122,7 +121,7 @@ class Counter extends Component {
               <div className="row">
                 <div className="col-sm">
                   <QrReader
-                    delay={200}
+                    delay={300}
                     onScan={this.appendToCart}
                     style={{ width: '20em' }}
                     onError={this.handleError}
