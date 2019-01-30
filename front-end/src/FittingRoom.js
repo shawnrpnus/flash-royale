@@ -324,15 +324,14 @@ class FittingRoom extends Component {
 
     return (
       <div className='container'>
-        <h1 style={{marginBottom: "1rem"}}>{"Fitting Room " + this.state.fittingRoomNumber}</h1>
-        <hr/>
+        <h1 className='display-4' style={{marginBottom: "1rem"}}>{"Fitting Room " + this.state.fittingRoomNumber}</h1>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
-        <h1 ref={"bottom"} style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
+        <p ref={"bottom"} className='lead' style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
               ? "Showing recommendations for: " + this.state.selectedItemForRecommendations.color + " " + this.state.selectedItemForRecommendations.name + " (" + this.state.selectedItemForRecommendations.size + ")"
               : "Select an item to view recommendations"}
-        </h1>
+        </p>
         <hr/>
         <div className="container row">
           {currentlyShowingRecommendations}

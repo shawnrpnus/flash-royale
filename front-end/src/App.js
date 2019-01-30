@@ -73,8 +73,8 @@ class App extends Component {
               :
               this.state.showFittingRoomSelection ?
                 <div>
+                  <p className="lead">Select fitting room number</p>
                   <select className="form-control" ref="dropdown">
-                    <option value="" disabled selected>Select fitting room number</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
