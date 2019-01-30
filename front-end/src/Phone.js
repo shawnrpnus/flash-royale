@@ -56,10 +56,10 @@ class Phone extends Component {
           <div className="card">
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
             <div className="card-body">
-              <h5 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h5>
+              <h5 className="card-title">{x.item.color + " " + x.item.name + " (" + x.item.size + ") for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h5>
               <div className="row text-center">
                 <button className="btn btn-primary" onClick={() => this.
-                  shiftFromPendingToTransit(x)}>Fetch for customer</button>
+                  shiftFromPendingToTransit(x)}><h5>Fetch for customer</h5></button>
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@ class Phone extends Component {
             <div className="card-body">
               <h5 className="card-title">{x.item.color + " " + x.item.name + " " + x.item.size + " for fitting room " + x.fittingRoomNumber + ". Location: " + x.item.location_in_store}</h5>
               <div className="row text-center">
-                <button className="btn btn-primary" onClick={() => this.markAsDelivered(x)}>Delivered</button>
+                <button className="btn btn-primary" onClick={() => this.markAsDelivered(x)}><h5>Delivered</h5></button>
               </div>
             </div>
           </div>
