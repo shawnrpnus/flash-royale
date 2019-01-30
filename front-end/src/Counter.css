@@ -25,7 +25,7 @@
 .QRcam{
 	margin: 0 auto;
   padding: 10px;
-	display: block;
+  display: block;
 }
 
 @keyframes App-logo-spin {
@@ -38,7 +38,7 @@
 }
 
 .select-room {
-  width: 50%;
+  width: 100%;
   padding-top: 1rem;
 }
 
@@ -65,7 +65,7 @@
   background: none;
   background-color: white;
   margin-top: 1rem;
-  padding: 0 16px 0 16px;
+  padding: 0 16px 16px 16px;
 }
 
 .hr-black {

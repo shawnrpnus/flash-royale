@@ -19,7 +19,8 @@ class FittingRoom extends Component {
       highlightItem3: false,
       highlightReco1: false,
       highlightReco2: false,
-      highlightReco3: false
+      highlightReco3: false,
+      requestedSize: ''
     }
 
     this.getItems = this.getItems.bind(this);
@@ -29,6 +30,8 @@ class FittingRoom extends Component {
     this.leaveRoom = this.leaveRoom.bind(this);
     this.requestedRecommendationsContains = this.requestedRecommendationsContains.bind(this);
     this.shouldEmptyRoom = this.shouldEmptyRoom.bind(this);
+    this.getRecoFromSizeAndItemNumber = this.getRecoFromSizeAndItemNumber.bind(this);
+    this.convertShownRecosToUniqRecos = this.convertShownRecosToUniqRecos.bind(this);
   }
 
   getItems(){
@@ -73,11 +76,36 @@ class FittingRoom extends Component {
             this.setState({
               highlightReco2: true
             })
+            console.log(this.state.highlightReco2);
             break;
           case "third item":
             this.setState({
-              highlightReco3: SVGComponentTransferFunctionElement
+              highlightReco3: true
             })
+            break;
+          case "size small":
+            this.setState({
+              requestedSize: "S"
+            })
+            break;
+          case "size medium":
+            this.setState({
+              requestedSize: "M"
+            })
+            break;
+          case "size large":
+            this.setState({
+              requestedSize: "L"
+            })
+            break;
+          case "yes confirm":
+            if (this.state.highlightReco1){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "first item"));
+            } else if (this.state.highlightReco2){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "second item"));
+            } else if (this.state.highlightReco2){
+              this.requestItem(this.getRecoFromSizeAndItemNumber(this.state.requestedSize, "third item"));
+            }
             break;
           default:
             console.log("Unavailable command");
@@ -87,7 +115,7 @@ class FittingRoom extends Component {
   }
   
   getRecommendations(apparel){
-    if (apparel.id !== null){
+    if (apparel !== null){
       var url = "http://207.46.230.56/recommendations/" + apparel.id;
       axios.get(url).then(response => {
         this.setState({
@@ -97,6 +125,47 @@ class FittingRoom extends Component {
         console.log(response);
       })
     }
+  }
+
+  getRecoFromSizeAndItemNumber(size, itemNumString){
+    var index;
+    switch(itemNumString){
+      case "first item":
+        index = 0;
+        break;
+      case "second item":
+        index = 1;
+        break;
+      case "third item":
+        index = 2;
+        break;
+      default:
+    }
+    let uniqRecoArr = this.convertShownRecosToUniqRecos();
+    let uniqReco = uniqRecoArr[index];
+    let image = uniqReco.image;
+    for (var i = 0; i < this.state.shownRecommendations.length; i++){
+      if (this.state.shownRecommendations[i].image === image && this.state.shownRecommendations[i].size === size){
+        return this.state.shownRecommendations[i];
+      }
+    }
+  }
+
+  convertShownRecosToUniqRecos(){
+    const recommendations = []
+    this.state.shownRecommendations.forEach(reco => {
+      let found = false
+      recommendations.forEach(existingReco => {
+        if (existingReco.image === reco.image) {
+          found = true
+        }
+      })
+      if (found === true) {
+        return
+      }
+      recommendations.push(reco)
+    })
+    return recommendations; 
   }
 
   requestItem(recommendation){
@@ -115,6 +184,13 @@ class FittingRoom extends Component {
       shownRecommendations: [],
       selectedItemForRecommendations: null,
       isOccupied: false, 
+      highlightItem1: false,
+      highlightItem2: false,
+      highlightItem3: false,
+      highlightReco1: false,
+      highlightReco2: false,
+      highlightReco3: false,
+      requestedSize: ''
     })
     var url = 'http://207.46.230.56/empty_room/' + this.state.fittingRoomNumber;
     axios.post(url).then(response => console.log(response));
@@ -151,7 +227,7 @@ class FittingRoom extends Component {
       //var jsonResponse = JSON.stringify(response);
       //console.log(jsonResponse);
       var count = response.data[0].count;
-      //console.log("Count: " + count);
+      console.log("Count: " + count);
       var isOccupiedNow = count > 0;
       var previousOccupied = this.state.isOccupied;
       this.setState({
@@ -170,14 +246,14 @@ class FittingRoom extends Component {
       var index = this.state.customerItems.indexOf(x);
       //console.log(index);
       return (
-        <div key={x.id} className="col-sm-3">
+        <div key={x.id} className="col-sm-3" style={{marginBottom: "1rem"}}>
           <div className={"card " + 
             ((index === 0 && this.state.highlightItem1) 
             || (index === 1 && this.state.highlightItem2) 
             || (index === 2 && this.state.highlightItem3) ? "bgyellow" : '')}>
             <img className="card-image-top card-image" src={imageUrl} alt="apparel"/>
-            <div className="card-body">
-              <h5 className="card-title">{x.color + " " + x.name + " \n" + x.size + "\n" + "$" + x.price}</h5>
+            <div className="card-body" style={{textAlign: "center", alignItem: "center", justifyContent: "center"}}>
+              <h5 className="card-title">{x.color + " " + x.name + " (" + x.size + ") $" + x.price}</h5>
               <button className="btn btn-primary" onClick={() => this.getRecommendations(x)}>See Recommendations</button>
             </div>
           </div>
@@ -216,22 +292,22 @@ class FittingRoom extends Component {
     var currentlyShowingRecommendations = recommendations.map(reco => {
       fuck++
       var imageUrl = 'https://hackathon2019sg.blob.core.windows.net/images/' + reco.image + '.jpg';
-      var index = this.state.shownRecommendations.indexOf(reco);
+      var index = recommendations.indexOf(reco);
       if (!addedRecoIds.includes(reco.image)){
         addedRecoIds = addedRecoIds.concat(reco.image);
         return (
           <div key={reco.id} className="col-sm-3">
             <div className={"card " + 
-              ((index === 0 && this.state.highlightReco1) 
+              (((index === 0 && this.state.highlightReco1) 
               || (index === 1 && this.state.highlightReco2) 
-              || (index === 2 && this.state.highlightReco3) ? "bgyellow" : '')}>
+              || (index === 2 && this.state.highlightReco3)) ? "bgyellow" : '')}>
               <img className="card-image-top card-image" src={imageUrl} alt="apparel" />
               <div className="card-body">
                 <h5 className="card-title">{reco.color + " " + reco.name + " $" + reco.price}</h5>
-                <h5 className="card-text">Select size: </h5>
-                {sizes[fuck]}
+                <h5 className="card-text">Available Sizes: </h5>
+                <p style={{color: "black", fontSize: "1.5vw"}}>{sizes[fuck]}</p>
                 {this.requestedRecommendationsContains(reco)
-                  ? <p className="card-text">Item is on its way!</p>
+                  ? <p className="card-text" style={{color: "black"}}>Item is on its way!</p>
                   : <button className="btn btn-primary" onClick={() => this.requestItem(reco)}>Request item</button>}
               </div>
             </div>
@@ -244,14 +320,16 @@ class FittingRoom extends Component {
 
     return (
       <div className='container'>
-        <h1>{"Room Number " + this.state.fittingRoomNumber}</h1>
+        <h1 style={{marginBottom: "1rem"}}>{"Fitting Room " + this.state.fittingRoomNumber}</h1>
+        <hr/>
         <div className="container row">
           {itemsInFittingRoom}
         </div>
-        <h1>{this.state.selectedItemForRecommendations!==null
-              ? "Recommendations for: " + this.state.selectedItemForRecommendations.name
+        <h1 style={{marginBottom: "1rem"}}>{this.state.selectedItemForRecommendations!==null
+              ? "Showing recommendations for: " + this.state.selectedItemForRecommendations.color + " " + this.state.selectedItemForRecommendations.name + " (" + this.state.selectedItemForRecommendations.size + ")"
               : "Select an item to view recommendations"}
         </h1>
+        <hr/>
         <div className="container row">
           {currentlyShowingRecommendations}
         </div>

@@ -90,10 +90,11 @@ and (orientation : portrait) {
 }
 
 .btn {
-  width: 110%;
-  padding-left: 3px;
-  font-size: 9px;
-  text-align: center;
+  width: 100%;
+  display: block;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 1.2vw;
 }
 
 .bgyellow{
