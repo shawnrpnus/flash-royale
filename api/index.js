@@ -58,12 +58,13 @@ app.get('/apparel/:id', cors(), (req, res) => {
 // GET request to find empty fitting rooms
 app.get('/find_empty_room', cors(), (req, res) => {
   console.log(`GET request for /find_empty_room`)
-  let temp = []
-  let result = [1, 2, 3, 4]
+  let occupied = []
+  let empty = [1, 2, 3, 4]
   fittingRoomItems.forEach((x) => {
-    temp.push(x.fittingRoomNumber)
+    occupied = occupied.concat(parseInt(x.fittingRoomNumber, 10))
   })
-  res.send(result.filter((x) => {return !temp.includes(x)}))
+  empty = empty.filter((x) => {return !occupied.includes(x)})
+  res.send(empty)
 })
 
 // GET to fetch row from stock table matching apparel_id and store_name

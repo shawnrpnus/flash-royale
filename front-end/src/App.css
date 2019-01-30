@@ -48,6 +48,12 @@
   height: 100%;
 }
 
+.hr-black {
+  border-color: black;
+  height: 3px;
+  width: 75%;
+}
+
 h1 {
   color: white;
 }
@@ -66,5 +72,3 @@ hr {
   width: 100%;
   font-size: 1.2vw;
 }
-
-  
