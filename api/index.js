@@ -1,5 +1,8 @@
 const express = require('express')
+const https = require('https')
+const http = require('http')
 const bodyParser = require('body-parser');
+const fs = require('fs')
 const app = express()
 app.use(bodyParser.json())
 const cors = require('cors')
@@ -254,4 +257,17 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
+//app.listen(port, () => {
+//  console.log(`Example app listening on port ${port}!`)
+//})
+
+const options = {
+  key: fs.readFileSync('privatekey.pem'),
+  cert: fs.readFileSync('certificate.pem')
+}
+
+// Create an HTTP service.
+http.createServer(app).listen(80);
+// Create an HTTPS service identical to the HTTP service.
+https.createServer(options, app).listen(443);
