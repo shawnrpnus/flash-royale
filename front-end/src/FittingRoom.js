@@ -204,7 +204,7 @@ class FittingRoom extends Component {
 
   requestedRecommendationsContains(rec){
     for (var i = 0; i < this.state.requestedRecommendations.length; i++){
-      if (this.state.requestedRecommendations[i].id === rec.id){
+      if (this.state.requestedRecommendations[i].image === rec.image){
         return true;
       }
     }

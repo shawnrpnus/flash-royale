@@ -97,6 +97,10 @@ class Counter extends Component {
     });
   }
 
+  componentDidMount(){
+    setInterval(this.getEmptyRooms, 1000);
+  }
+
   render() {
 
     var cart = this.state.cart.map(x => <ol key={x}> {x} <div className="btn-group"><button className="btn btn-danger" onClick={() => this.deleteItem(x)}>Delete</button></div></ol>);
@@ -136,12 +140,12 @@ class Counter extends Component {
                   <div className="float-right cart-btns">
                     <button className="btn btn-primary" onClick={this.clearCart}>Clear cart</button>
                       <div className="container select-room">
+                        <h5> Select a fitting room: </h5>
                         <select className="form-control dropdown-custom" ref="dropdown" required>
-                          <option value="" disabled selected>Select a fitting room</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
+                          {this.state.emptyRooms.includes(1) ? <option value="1">1</option> : ''}
+                          {this.state.emptyRooms.includes(2) ? <option value="2">2</option> : ''}
+                          {this.state.emptyRooms.includes(3) ? <option value="3">3</option> : ''}
+                          {this.state.emptyRooms.includes(4) ? <option value="4">4</option> : ''}
                         </select>
                       </div>
                     {this.state.cart.length > 0 ? <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>:''}
